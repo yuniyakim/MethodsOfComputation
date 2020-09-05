@@ -1,0 +1,17 @@
+image: Visual Studio 2019
+
+init:
+  - git config --global core.autocrlf true
+
+environment:
+  matrix:
+  - solution: Semester5/LaboratoryWork1/LaboratoryWork1.sln
+
+before_build:
+  - nuget restore %solution%
+
+build:
+  project: $(solution)
+
+test_script:
+  - dotnet test %solution%
