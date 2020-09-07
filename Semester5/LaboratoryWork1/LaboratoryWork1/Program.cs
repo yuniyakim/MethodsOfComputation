@@ -13,9 +13,23 @@ namespace LaboratoryWork1
         /// <summary>
         /// Function
         /// </summary>
-        /// <param name="x">Parameter x</param>
+        /// <param name="x">Argument</param>
         /// <returns>Function's value</returns>
         private static double Function(double x) => x * Math.Sin(x) - 1;
+
+        /// <summary>
+        /// Function's first derivative
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>First derivative's value</returns>
+        private static double FirstDerivative(double x) => Math.Sin(x) + x * Math.Cos(x);
+
+        /// <summary>
+        /// Function's second derivative
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>Second derivative's value</returns>
+        private static double SecondDerivative(double x) => 2 * Math.Cos(x) - x * Math.Sin(x);
 
         /// <summary>
         /// Separates roots and adds corresponding intervals into list
@@ -60,22 +74,22 @@ namespace LaboratoryWork1
         }
 
         /// <summary>
-        /// Finds the root of the equation in the given interval
+        /// Finds the root of the equation in the given interval using bisection method
         /// </summary>
-        /// <param name="left">Left border of the given interval</param>
-        /// <param name="right">Right border of the given interval</param>
+        /// <param name="leftBorder">Left border of the given interval</param>
+        /// <param name="rightBorder">Right border of the given interval</param>
         /// <param name="epsilon">Given accuracy</param>
         /// <returns>Root in the given interval</returns>
-        public static double BisectionFindRoot(double left, double right, double epsilon)
+        private static double BisectionFindRoot(double leftBorder, double rightBorder, double epsilon)
         {
-            if (epsilon <= 0 || left > right)
+            if (epsilon <= 0 || leftBorder > rightBorder)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
             double middle = 0;
-            var localRight = right;
-            var localLeft = left;
+            var localRight = rightBorder;
+            var localLeft = leftBorder;
             var amountOfSteps = 0;
             while (localRight - localLeft > 2 * epsilon)
             {
@@ -93,13 +107,60 @@ namespace LaboratoryWork1
 
             var x = (localLeft + localRight) / 2;
             Console.WriteLine($"Root of the equation: {x}.");
-            Console.WriteLine($"Initial approximation: {left}.");
+            Console.WriteLine($"Initial approximation: {leftBorder}.");
             Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
             Console.WriteLine($"Delta: {(localRight - localLeft) / 2}.");
             Console.WriteLine($"Absolute value of the residual: {Function(x)}.");
             Console.WriteLine();
 
             return x;
+        }
+
+        /// <summary>
+        /// Finds the root of the equation in the given interval using Newton's method
+        /// </summary>
+        /// <param name="leftBorder">Left border of the given interval</param>
+        /// <param name="rightBorder">Right border of the given interval</param>
+        /// <param name="epsilon">Given accuracy</param>
+        /// <param name="multiplicity">Current multiplicity</param>
+        /// <returns></returns>
+        private static double NewtonFindRoot(double leftBorder, double rightBorder, double epsilon, int multiplicity)
+        {
+            if (epsilon <= 0 || leftBorder > rightBorder)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            var current = Function(leftBorder) * SecondDerivative(leftBorder) > 0 ? leftBorder : rightBorder;
+            var initialApproximation = current;
+
+            if (FirstDerivative(current) == 0)
+            {
+                return NewtonFindRoot(leftBorder, rightBorder, epsilon, multiplicity + 2);
+            }
+
+            var next = current - multiplicity * Function(current) / FirstDerivative(current);
+            var amountOfSteps = 1;
+            while (Math.Abs(next - current) > epsilon)
+            {
+                current = next;
+
+                if (FirstDerivative(current) == 0)
+                {
+                    return NewtonFindRoot(leftBorder, rightBorder, epsilon, multiplicity + 2);
+                }
+
+                next = current - multiplicity * Function(current) / FirstDerivative(current);
+                amountOfSteps++;
+            }
+
+            Console.WriteLine($"Root of the equation: {next}.");
+            Console.WriteLine($"Initial approximation: {initialApproximation}.");
+            Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
+            Console.WriteLine($"Delta: {Math.Abs(next - current)}.");
+            Console.WriteLine($"Absolute value of the residual: {Function(next)}.");
+            Console.WriteLine();
+
+            return next;
         }
 
         public static void Main()
@@ -115,10 +176,17 @@ namespace LaboratoryWork1
             var intervals = SeparateRoots(left, right, partition);
 
             Console.WriteLine("BISECTION METHOD.");
-            var roots = new List<double>();
+            var bisectionRoots = new List<double>();
             foreach (var interval in intervals)
             {
-                roots.Add(BisectionFindRoot(interval.Item1, interval.Item2, epsilon));
+                bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2, epsilon));
+            }
+
+            Console.WriteLine("NEWTON'S METHOD.");
+            var newtonRoots = new List<double>();
+            foreach (var interval in intervals)
+            {
+                newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, epsilon, 1));
             }
         }
     }
