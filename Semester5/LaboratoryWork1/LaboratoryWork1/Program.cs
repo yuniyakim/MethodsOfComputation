@@ -78,11 +78,10 @@ namespace LaboratoryWork1
         /// </summary>
         /// <param name="leftBorder">Left border of the given interval</param>
         /// <param name="rightBorder">Right border of the given interval</param>
-        /// <param name="epsilon">Given accuracy</param>
         /// <returns>Root in the given interval</returns>
-        private static double BisectionFindRoot(double leftBorder, double rightBorder, double epsilon)
+        private static double BisectionFindRoot(double leftBorder, double rightBorder)
         {
-            if (epsilon <= 0 || leftBorder > rightBorder)
+            if (leftBorder > rightBorder)
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -121,12 +120,11 @@ namespace LaboratoryWork1
         /// </summary>
         /// <param name="leftBorder">Left border of the given interval</param>
         /// <param name="rightBorder">Right border of the given interval</param>
-        /// <param name="epsilon">Given accuracy</param>
         /// <param name="multiplicity">Current multiplicity</param>
         /// <returns>Root in the given interval</returns>
-        private static double NewtonFindRoot(double leftBorder, double rightBorder, double epsilon, int multiplicity)
+        private static double NewtonFindRoot(double leftBorder, double rightBorder, int multiplicity)
         {
-            if (epsilon <= 0 || leftBorder > rightBorder)
+            if (leftBorder > rightBorder)
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -136,7 +134,7 @@ namespace LaboratoryWork1
 
             if (FirstDerivative(current) == 0)
             {
-                return NewtonFindRoot(leftBorder, rightBorder, epsilon, multiplicity + 2);
+                return NewtonFindRoot(leftBorder, rightBorder, multiplicity + 2);
             }
 
             var next = current - multiplicity * Function(current) / FirstDerivative(current);
@@ -147,7 +145,7 @@ namespace LaboratoryWork1
 
                 if (FirstDerivative(current) == 0)
                 {
-                    return NewtonFindRoot(leftBorder, rightBorder, epsilon, multiplicity + 2);
+                    return NewtonFindRoot(leftBorder, rightBorder, multiplicity + 2);
                 }
 
                 next = current - multiplicity * Function(current) / FirstDerivative(current);
@@ -170,11 +168,10 @@ namespace LaboratoryWork1
         /// </summary>
         /// <param name="leftBorder">Left border of the given interval</param>
         /// <param name="rightBorder">Right border of the given interval</param>
-        /// <param name="epsilon">Given accuracy</param>
         /// <returns>Root in the given interval</returns>
-        private static double ModifiedNewtonFindRoot(double leftBorder, double rightBorder, double epsilon)
+        private static double ModifiedNewtonFindRoot(double leftBorder, double rightBorder)
         {
-            if (epsilon <= 0 || leftBorder > rightBorder)
+            if (leftBorder > rightBorder)
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -202,6 +199,41 @@ namespace LaboratoryWork1
             return next;
         }
 
+        /// <summary>
+        /// Finds the root of the equation in the given interval using secant's method
+        /// </summary>
+        /// <param name="leftBorder">Left border of the given interval</param>
+        /// <param name="rightBorder">Right border of the given interval</param>
+        /// <returns>Root in the given interval</returns>
+        private static double SecantFindRoot(double leftBorder, double rightBorder)
+        {
+            if (leftBorder > rightBorder)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var previous = leftBorder;
+            var current = rightBorder;
+            var next = current - Function(current) * (current - previous) / (Function(current) - Function(previous));
+            var amountOfSteps = 1;
+            while (Math.Abs(current - previous) > epsilon)
+            {
+                previous = current;
+                current = next;
+                next = current - Function(current) * (current - previous) / (Function(current) - Function(previous));
+                amountOfSteps++;
+            }
+
+            Console.WriteLine($"Root of the equation: {current}.");
+            Console.WriteLine($"Initial approximation: {leftBorder}, {rightBorder}.");
+            Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
+            Console.WriteLine($"Delta: {Math.Abs(current - previous)}.");
+            Console.WriteLine($"Absolute value of the residual: {Function(current)}.");
+            Console.WriteLine();
+
+            return next;
+        }
+
         public static void Main()
         {
             Console.WriteLine("Hello!");
@@ -214,25 +246,37 @@ namespace LaboratoryWork1
 
             var intervals = SeparateRoots(left, right, partition);
 
+            if (epsilon <= 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             Console.WriteLine("\nBISECTION METHOD.");
             var bisectionRoots = new List<double>();
             foreach (var interval in intervals)
             {
-                bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2, epsilon));
+                bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2));
             }
 
             Console.WriteLine("\nNEWTON'S METHOD.");
             var newtonRoots = new List<double>();
             foreach (var interval in intervals)
             {
-                newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, epsilon, 1));
+                newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, 1));
             }
 
             Console.WriteLine("\nMODIFIED NEWTON'S METHOD.");
             var modifiedNewtonRoots = new List<double>();
             foreach (var interval in intervals)
             {
-                modifiedNewtonRoots.Add(ModifiedNewtonFindRoot(interval.Item1, interval.Item2, epsilon));
+                modifiedNewtonRoots.Add(ModifiedNewtonFindRoot(interval.Item1, interval.Item2));
+            }
+
+            Console.WriteLine("\nSECANT'S METHOD.");
+            var secantRoots = new List<double>();
+            foreach (var interval in intervals)
+            {
+                secantRoots.Add(SecantFindRoot(interval.Item1, interval.Item2));
             }
         }
     }
