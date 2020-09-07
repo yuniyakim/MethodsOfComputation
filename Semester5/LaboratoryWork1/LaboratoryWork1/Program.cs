@@ -20,24 +20,24 @@ namespace LaboratoryWork1
         /// <summary>
         /// Separates roots and adds corresponding intervals into list
         /// </summary>
-        /// <param name="A">Left border of starting interval</param>
-        /// <param name="B">Right border of starting interval</param>
-        /// <param name="N">Partition</param>
-        /// <returns>List with roots' sintervals</returns>
-        private static List<(double, double)> RootsSeparation(double A, double B, int N)
+        /// <param name="left">Left border of starting interval</param>
+        /// <param name="right">Right border of starting interval</param>
+        /// <param name="partition">Interval's partition</param>
+        /// <returns>List with roots' intervals</returns>
+        private static List<(double, double)> SeparateRoots(double left, double right, int partition)
         {
-            if (N <= 0 || A > B)
+            if (partition <= 0 || left > right)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            var h = (B - A) / N;
+            var h = (right - left) / partition;
             var intervals = new List<(double, double)>();
-            var x1 = A;
+            var x1 = left;
             var x2 = x1 + h;
             var y1 = Function(x1);
             double y2 = 0;
-            while (x2 <= B)
+            while (x2 <= right)
             {
                 y2 = Function(x2);
                 if (y1*y2 <= 0)
@@ -48,12 +48,55 @@ namespace LaboratoryWork1
                 x2 = x1 + h;
                 y1 = y2;
             }
-            Console.WriteLine(intervals.Count);
+
+            Console.WriteLine($"\nAmount of sign reversal segments: {intervals.Count}.");
             foreach (var interval in intervals)
             {
                 Console.WriteLine($"[{interval.Item1}; {interval.Item2}]");
             }
+            Console.WriteLine();
+
             return intervals;
+        }
+
+        /// <summary>
+        /// Finds the root of the equation in the given interval
+        /// </summary>
+        /// <param name="left">Left border of the given interval</param>
+        /// <param name="right">Right border of the given interval</param>
+        /// <param name="epsilon">Given accuracy</param>
+        /// <returns>Root in the given interval</returns>
+        public double BisectionFindRoot(double left, double right, double epsilon)
+        {
+            if (epsilon <= 0 || left > right)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            Console.WriteLine($"Current interaval: [{left}, {right}].");
+
+            var middle = (right - left) / 2;
+            var amountOfSteps = 0;
+            while (right - left > 2 * epsilon)
+            {
+                if (Function(left) * Function(middle) <= 0)
+                {
+                    right = middle;
+                }
+                else
+                {
+                    left = middle;
+                }
+                amountOfSteps++;
+            }
+
+            var x = (left + right) / 2;
+            Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
+            Console.WriteLine($"Root of the equation: {x}.");
+            Console.WriteLine($"Delta: {(right - left) / 2}.");
+            Console.WriteLine($"Absolute value of the residual: {Function(x)}.");
+
+            return x;
         }
 
         public static void Main()
@@ -66,7 +109,9 @@ namespace LaboratoryWork1
 
             const int partition = 1000;
 
-            var intervals = RootsSeparation(left, right, partition);
+            var intervals = SeparateRoots(left, right, partition);
+
+
         }
     }
 }
