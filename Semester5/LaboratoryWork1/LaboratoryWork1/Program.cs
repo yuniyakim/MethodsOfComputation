@@ -123,13 +123,14 @@ namespace LaboratoryWork1
         /// <param name="rightBorder">Right border of the given interval</param>
         /// <param name="epsilon">Given accuracy</param>
         /// <param name="multiplicity">Current multiplicity</param>
-        /// <returns></returns>
+        /// <returns>Root in the given interval</returns>
         private static double NewtonFindRoot(double leftBorder, double rightBorder, double epsilon, int multiplicity)
         {
             if (epsilon <= 0 || leftBorder > rightBorder)
             {
                 throw new ArgumentOutOfRangeException();
             }
+
             var current = Function(leftBorder) * SecondDerivative(leftBorder) > 0 ? leftBorder : rightBorder;
             var initialApproximation = current;
 
@@ -164,6 +165,43 @@ namespace LaboratoryWork1
             return next;
         }
 
+        /// <summary>
+        /// Finds the root of the equation in the given interval using modified Newton's method
+        /// </summary>
+        /// <param name="leftBorder">Left border of the given interval</param>
+        /// <param name="rightBorder">Right border of the given interval</param>
+        /// <param name="epsilon">Given accuracy</param>
+        /// <returns>Root in the given interval</returns>
+        private static double ModifiedNewtonFindRoot(double leftBorder, double rightBorder, double epsilon)
+        {
+            if (epsilon <= 0 || leftBorder > rightBorder)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var current = Function(leftBorder) * SecondDerivative(leftBorder) > 0 ? leftBorder : rightBorder;
+            var initialApproximation = current;
+            var initialApproximationDerivative = FirstDerivative(initialApproximation);
+
+            var next = current - Function(current) / initialApproximationDerivative;
+            var amountOfSteps = 1;
+            while (Math.Abs(next - current) > epsilon)
+            {
+                current = next;
+                next = current - Function(current) / initialApproximationDerivative;
+                amountOfSteps++;
+            }
+
+            Console.WriteLine($"Root of the equation: {next}.");
+            Console.WriteLine($"Initial approximation: {initialApproximation}.");
+            Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
+            Console.WriteLine($"Delta: {Math.Abs(next - current)}.");
+            Console.WriteLine($"Absolute value of the residual: {Function(next)}.");
+            Console.WriteLine();
+
+            return next;
+        }
+
         public static void Main()
         {
             Console.WriteLine("Hello!");
@@ -188,6 +226,13 @@ namespace LaboratoryWork1
             foreach (var interval in intervals)
             {
                 newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, epsilon, 1));
+            }
+
+            Console.WriteLine("\nMODIFIED NEWTON'S METHOD.");
+            var modifiedNewtonRoots = new List<double>();
+            foreach (var interval in intervals)
+            {
+                modifiedNewtonRoots.Add(ModifiedNewtonFindRoot(interval.Item1, interval.Item2, epsilon));
             }
         }
     }
