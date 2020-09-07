@@ -11,6 +11,3 @@ before_build:
 
 build:
   - dotnet build $solution
-
-script:
-  - dotnet test $solution

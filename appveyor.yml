@@ -13,5 +13,3 @@ before_build:
 build:
   project: $(solution)
 
-test_script:
-  - dotnet test %solution%
