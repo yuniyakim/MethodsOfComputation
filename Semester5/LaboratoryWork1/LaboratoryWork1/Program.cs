@@ -158,6 +158,7 @@ namespace LaboratoryWork1
             Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
             Console.WriteLine($"Delta: {Math.Abs(next - current)}.");
             Console.WriteLine($"Absolute value of the residual: {Function(next)}.");
+            Console.WriteLine($"Multiplicity: {multiplicity}.");
             Console.WriteLine();
 
             return next;
@@ -175,14 +176,14 @@ namespace LaboratoryWork1
 
             var intervals = SeparateRoots(left, right, partition);
 
-            Console.WriteLine("BISECTION METHOD.");
+            Console.WriteLine("\nBISECTION METHOD.");
             var bisectionRoots = new List<double>();
             foreach (var interval in intervals)
             {
                 bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2, epsilon));
             }
 
-            Console.WriteLine("NEWTON'S METHOD.");
+            Console.WriteLine("\nNEWTON'S METHOD.");
             var newtonRoots = new List<double>();
             foreach (var interval in intervals)
             {
