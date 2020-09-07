@@ -109,7 +109,7 @@ namespace LaboratoryWork1
             Console.WriteLine($"Initial approximation: {leftBorder}.");
             Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
             Console.WriteLine($"Delta: {(localRight - localLeft) / 2}.");
-            Console.WriteLine($"Absolute value of the residual: {Function(x)}.");
+            Console.WriteLine($"Absolute value of the residual: {Math.Abs(Function(x))}.");
             Console.WriteLine();
 
             return x;
@@ -152,11 +152,12 @@ namespace LaboratoryWork1
                 amountOfSteps++;
             }
 
-            Console.WriteLine($"Root of the equation: {next}.");
+            var x = next;
+            Console.WriteLine($"Root of the equation: {x}.");
             Console.WriteLine($"Initial approximation: {initialApproximation}.");
             Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
             Console.WriteLine($"Delta: {Math.Abs(next - current)}.");
-            Console.WriteLine($"Absolute value of the residual: {Function(next)}.");
+            Console.WriteLine($"Absolute value of the residual: {Math.Abs(Function(x))}.");
             Console.WriteLine($"Multiplicity: {multiplicity}.");
             Console.WriteLine();
 
@@ -189,11 +190,12 @@ namespace LaboratoryWork1
                 amountOfSteps++;
             }
 
-            Console.WriteLine($"Root of the equation: {next}.");
+            var x = next;
+            Console.WriteLine($"Root of the equation: {x}.");
             Console.WriteLine($"Initial approximation: {initialApproximation}.");
             Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
             Console.WriteLine($"Delta: {Math.Abs(next - current)}.");
-            Console.WriteLine($"Absolute value of the residual: {Function(next)}.");
+            Console.WriteLine($"Absolute value of the residual: {Math.Abs(Function(x))}.");
             Console.WriteLine();
 
             return next;
@@ -224,11 +226,12 @@ namespace LaboratoryWork1
                 amountOfSteps++;
             }
 
-            Console.WriteLine($"Root of the equation: {current}.");
+            var x = current;
+            Console.WriteLine($"Root of the equation: {x}.");
             Console.WriteLine($"Initial approximation: {leftBorder}, {rightBorder}.");
             Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
             Console.WriteLine($"Delta: {Math.Abs(current - previous)}.");
-            Console.WriteLine($"Absolute value of the residual: {Function(current)}.");
+            Console.WriteLine($"Absolute value of the residual: {Math.Abs(Function(x))}.");
             Console.WriteLine();
 
             return next;
@@ -255,6 +258,7 @@ namespace LaboratoryWork1
             var bisectionRoots = new List<double>();
             foreach (var interval in intervals)
             {
+                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
                 bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2));
             }
 
@@ -262,6 +266,7 @@ namespace LaboratoryWork1
             var newtonRoots = new List<double>();
             foreach (var interval in intervals)
             {
+                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
                 newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, 1));
             }
 
@@ -269,6 +274,7 @@ namespace LaboratoryWork1
             var modifiedNewtonRoots = new List<double>();
             foreach (var interval in intervals)
             {
+                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
                 modifiedNewtonRoots.Add(ModifiedNewtonFindRoot(interval.Item1, interval.Item2));
             }
 
@@ -276,6 +282,7 @@ namespace LaboratoryWork1
             var secantRoots = new List<double>();
             foreach (var interval in intervals)
             {
+                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
                 secantRoots.Add(SecantFindRoot(interval.Item1, interval.Item2));
             }
         }
