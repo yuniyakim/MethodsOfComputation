@@ -66,35 +66,38 @@ namespace LaboratoryWork1
         /// <param name="right">Right border of the given interval</param>
         /// <param name="epsilon">Given accuracy</param>
         /// <returns>Root in the given interval</returns>
-        public double BisectionFindRoot(double left, double right, double epsilon)
+        public static double BisectionFindRoot(double left, double right, double epsilon)
         {
             if (epsilon <= 0 || left > right)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            Console.WriteLine($"Current interaval: [{left}, {right}].");
-
-            var middle = (right - left) / 2;
+            double middle = 0;
+            var localRight = right;
+            var localLeft = left;
             var amountOfSteps = 0;
-            while (right - left > 2 * epsilon)
+            while (localRight - localLeft > 2 * epsilon)
             {
-                if (Function(left) * Function(middle) <= 0)
+                middle = (localRight + localLeft) / 2;
+                if (Function(localLeft) * Function(middle) <= 0)
                 {
-                    right = middle;
+                    localRight = middle;
                 }
                 else
                 {
-                    left = middle;
+                    localLeft = middle;
                 }
                 amountOfSteps++;
             }
 
-            var x = (left + right) / 2;
-            Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
+            var x = (localLeft + localRight) / 2;
             Console.WriteLine($"Root of the equation: {x}.");
-            Console.WriteLine($"Delta: {(right - left) / 2}.");
+            Console.WriteLine($"Initial approximation: {left}.");
+            Console.WriteLine($"Amount of steps to the root: {amountOfSteps}.");
+            Console.WriteLine($"Delta: {(localRight - localLeft) / 2}.");
             Console.WriteLine($"Absolute value of the residual: {Function(x)}.");
+            Console.WriteLine();
 
             return x;
         }
@@ -111,7 +114,12 @@ namespace LaboratoryWork1
 
             var intervals = SeparateRoots(left, right, partition);
 
-
+            Console.WriteLine("BISECTION METHOD.");
+            var roots = new List<double>();
+            foreach (var interval in intervals)
+            {
+                roots.Add(BisectionFindRoot(interval.Item1, interval.Item2, epsilon));
+            }
         }
     }
 }
