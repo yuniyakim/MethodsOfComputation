@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace LaboratoryWork1
 {
     public class Program
     {
         private static readonly string function = "f(x) = x * sin(x) - 1";
-        private static readonly double epsilon = Math.Pow(10, -5);
-        private static readonly double left = -10;
-        private static readonly double right = 2;
+        private static double epsilon = Math.Pow(10, -5);
+        private static double left = -10;
+        private static double right = 2;
+        private static int partition = 1000;
 
         /// <summary>
         /// Function
@@ -240,12 +242,69 @@ namespace LaboratoryWork1
         public static void Main()
         {
             Console.WriteLine("Hello!");
-            Console.WriteLine("This program finds all the roots of the transcendent equation in the given interval.\n");
+            Console.WriteLine("This program finds all the roots of the transcendent equation in the given interval.");
+            Console.WriteLine();
+
+            Console.WriteLine("Do you want to enter parameters? Y/N");
+            Console.WriteLine("NOTE: if N, then program will use default parameters.");
+
+            var input = Console.ReadLine();
+            while (input != "Y" && input != "N")
+            {
+                Console.WriteLine("Please, enter Y or N.");
+                input = Console.ReadLine();
+            }
+
+            if (input == "Y")
+            {
+
+                Console.WriteLine("Please, enter the left border of desired interval.");
+                Console.WriteLine("NOTE: doubles are being entered with dot, NOT comma.");
+                double A = 0;
+                var flagA = double.TryParse(Console.ReadLine(), out A);
+                while (!flagA)
+                {
+                    Console.WriteLine("Please, enter the CORRECT (double) left border of desired interval.");
+                    flagA = double.TryParse(Console.ReadLine(), out A);
+                }
+                left = A;
+
+                Console.WriteLine("\nPlease, enter the right border of desired interval.");
+                double B = 0;
+                var flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
+                while (!flagB)
+                {
+                    Console.WriteLine($"Please, enter the CORRECT (double, greater than A = {A}) right border of desired interval.");
+                    flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
+                }
+                right = B;
+
+                Console.WriteLine("\nPlease, enter desired accuracy.");
+                double eps = 0;
+                var flagEps = double.TryParse(Console.ReadLine(), out eps) && eps > 0;
+                while (!flagEps)
+                {
+                    Console.WriteLine($"Please, enter the CORRECT (double, greater than 0) desired accuracy.");
+                    flagEps = double.TryParse(Console.ReadLine(), out eps) && eps > 0;
+                }
+                epsilon = eps;
+
+                Console.WriteLine("\nPlease, enter desired partition.");
+                var part = 0;
+                var flagPart = int.TryParse(Console.ReadLine(), out part) && part > 0;
+                while (!flagPart)
+                {
+                    Console.WriteLine($"Please, enter the CORRECT (int, greater than 0) desired partition.");
+                    flagPart = int.TryParse(Console.ReadLine(), out part) && part > 0;
+                }
+                partition = part;
+            }
+
+            Console.WriteLine();
             Console.WriteLine($"Function: {function}.");
             Console.WriteLine($"Interval: [{left}, {right}].");
             Console.WriteLine($"Epsilon: {epsilon}.");
-
-            const int partition = 1000;
+            Console.WriteLine($"Partition: {partition}.");
 
             var intervals = SeparateRoots(left, right, partition);
 
@@ -287,8 +346,13 @@ namespace LaboratoryWork1
             //    secantRoots.Add(SecantFindRoot(interval.Item1, interval.Item2));
             //}
 
+            var number = 1;
             foreach (var interval in intervals)
             {
+                Console.WriteLine();
+                Console.WriteLine($"\nINTERVAL NUMBER {number}!");
+                Console.WriteLine($"[{interval.Item1}; {interval.Item2}].");
+
                 Console.WriteLine("\nBISECTION METHOD.");
                 bisectionRoots.Add(Program.BisectionFindRoot(interval.Item1, interval.Item2));
 
@@ -300,6 +364,8 @@ namespace LaboratoryWork1
 
                 Console.WriteLine("\nSECANT'S METHOD.");
                 secantRoots.Add(Program.SecantFindRoot(interval.Item1, interval.Item2));
+
+                number++;
             }
         }
     }
