@@ -14,4 +14,4 @@ build:
   project: $(solution)
 
 script:
-  - dotnet test $solution
+  - dotnet test $(solution)
