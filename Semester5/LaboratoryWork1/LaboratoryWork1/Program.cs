@@ -242,11 +242,11 @@ namespace LaboratoryWork1
         public static void Main()
         {
             Console.WriteLine("Hello!");
-            Console.WriteLine("This program finds all the roots of the transcendent equation in the given interval.");
+            Console.WriteLine("This program finds all the roots of the transcendent equation in the given interval with given accuracy.");
             Console.WriteLine();
 
             Console.WriteLine("Do you want to enter parameters? Y/N");
-            Console.WriteLine("NOTE: if N, then program will use default parameters.");
+            Console.WriteLine("NOTE: if N, program will use default values of parameters.");
 
             var input = Console.ReadLine();
             while (input != "Y" && input != "N")
@@ -257,7 +257,6 @@ namespace LaboratoryWork1
 
             if (input == "Y")
             {
-
                 Console.WriteLine("Please, enter the left border of desired interval.");
                 Console.WriteLine("NOTE: doubles are being entered with dot, NOT comma.");
                 double A = 0;
@@ -318,39 +317,13 @@ namespace LaboratoryWork1
             var modifiedNewtonRoots = new List<double>();
             var secantRoots = new List<double>();
 
-            //Console.WriteLine("\nBISECTION METHOD.");
-            //foreach (var interval in intervals)
-            //{
-            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-            //    bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2));
-            //}
-
-            //Console.WriteLine("\nNEWTON'S METHOD.");
-            //foreach (var interval in intervals)
-            //{
-            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-            //    newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, 1));
-            //}
-
-            //Console.WriteLine("\nMODIFIED NEWTON'S METHOD.");
-            //foreach (var interval in intervals)
-            //{
-            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-            //    modifiedNewtonRoots.Add(ModifiedNewtonFindRoot(interval.Item1, interval.Item2));
-            //}
-
-            //Console.WriteLine("\nSECANT'S METHOD.");
-            //foreach (var interval in intervals)
-            //{
-            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-            //    secantRoots.Add(SecantFindRoot(interval.Item1, interval.Item2));
-            //}
-
-            var number = 1;
+            var number = 0;
             foreach (var interval in intervals)
             {
+                number++;
+
                 Console.WriteLine();
-                Console.WriteLine($"\nINTERVAL NUMBER {number}!");
+                Console.WriteLine($"\nINTERVAL NUMBER {number}");
                 Console.WriteLine($"[{interval.Item1}; {interval.Item2}].");
 
                 Console.WriteLine("\nBISECTION METHOD.");
@@ -364,8 +337,6 @@ namespace LaboratoryWork1
 
                 Console.WriteLine("\nSECANT'S METHOD.");
                 secantRoots.Add(Program.SecantFindRoot(interval.Item1, interval.Item2));
-
-                number++;
             }
         }
     }
