@@ -38,7 +38,7 @@ namespace LaboratoryWork1
         /// <param name="right">Right border of starting interval</param>
         /// <param name="partition">Interval's partition</param>
         /// <returns>List with roots' intervals</returns>
-        private static List<(double, double)> SeparateRoots(double left, double right, int partition)
+        public static List<(double, double)> SeparateRoots(double left, double right, int partition)
         {
             if (partition <= 0 || left > right)
             {
@@ -79,7 +79,7 @@ namespace LaboratoryWork1
         /// <param name="leftBorder">Left border of the given interval</param>
         /// <param name="rightBorder">Right border of the given interval</param>
         /// <returns>Root in the given interval</returns>
-        private static double BisectionFindRoot(double leftBorder, double rightBorder)
+        public static double BisectionFindRoot(double leftBorder, double rightBorder)
         {
             if (leftBorder > rightBorder)
             {
@@ -122,7 +122,7 @@ namespace LaboratoryWork1
         /// <param name="rightBorder">Right border of the given interval</param>
         /// <param name="multiplicity">Current multiplicity</param>
         /// <returns>Root in the given interval</returns>
-        private static double NewtonFindRoot(double leftBorder, double rightBorder, int multiplicity)
+        public static double NewtonFindRoot(double leftBorder, double rightBorder, int multiplicity)
         {
             if (leftBorder > rightBorder)
             {
@@ -170,7 +170,7 @@ namespace LaboratoryWork1
         /// <param name="leftBorder">Left border of the given interval</param>
         /// <param name="rightBorder">Right border of the given interval</param>
         /// <returns>Root in the given interval</returns>
-        private static double ModifiedNewtonFindRoot(double leftBorder, double rightBorder)
+        public static double ModifiedNewtonFindRoot(double leftBorder, double rightBorder)
         {
             if (leftBorder > rightBorder)
             {
@@ -207,7 +207,7 @@ namespace LaboratoryWork1
         /// <param name="leftBorder">Left border of the given interval</param>
         /// <param name="rightBorder">Right border of the given interval</param>
         /// <returns>Root in the given interval</returns>
-        private static double SecantFindRoot(double leftBorder, double rightBorder)
+        public static double SecantFindRoot(double leftBorder, double rightBorder)
         {
             if (leftBorder > rightBorder)
             {
@@ -254,36 +254,52 @@ namespace LaboratoryWork1
                 throw new ArgumentOutOfRangeException();
             }
 
-            Console.WriteLine("\nBISECTION METHOD.");
             var bisectionRoots = new List<double>();
-            foreach (var interval in intervals)
-            {
-                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-                bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2));
-            }
-
-            Console.WriteLine("\nNEWTON'S METHOD.");
             var newtonRoots = new List<double>();
-            foreach (var interval in intervals)
-            {
-                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-                newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, 1));
-            }
-
-            Console.WriteLine("\nMODIFIED NEWTON'S METHOD.");
             var modifiedNewtonRoots = new List<double>();
-            foreach (var interval in intervals)
-            {
-                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-                modifiedNewtonRoots.Add(ModifiedNewtonFindRoot(interval.Item1, interval.Item2));
-            }
-
-            Console.WriteLine("\nSECANT'S METHOD.");
             var secantRoots = new List<double>();
+
+            //Console.WriteLine("\nBISECTION METHOD.");
+            //foreach (var interval in intervals)
+            //{
+            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
+            //    bisectionRoots.Add(BisectionFindRoot(interval.Item1, interval.Item2));
+            //}
+
+            //Console.WriteLine("\nNEWTON'S METHOD.");
+            //foreach (var interval in intervals)
+            //{
+            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
+            //    newtonRoots.Add(NewtonFindRoot(interval.Item1, interval.Item2, 1));
+            //}
+
+            //Console.WriteLine("\nMODIFIED NEWTON'S METHOD.");
+            //foreach (var interval in intervals)
+            //{
+            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
+            //    modifiedNewtonRoots.Add(ModifiedNewtonFindRoot(interval.Item1, interval.Item2));
+            //}
+
+            //Console.WriteLine("\nSECANT'S METHOD.");
+            //foreach (var interval in intervals)
+            //{
+            //    //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
+            //    secantRoots.Add(SecantFindRoot(interval.Item1, interval.Item2));
+            //}
+
             foreach (var interval in intervals)
             {
-                //Console.WriteLine($"Current interval: [{interval.Item1}; {interval.Item2}].");
-                secantRoots.Add(SecantFindRoot(interval.Item1, interval.Item2));
+                Console.WriteLine("\nBISECTION METHOD.");
+                bisectionRoots.Add(Program.BisectionFindRoot(interval.Item1, interval.Item2));
+
+                Console.WriteLine("\nNEWTON'S METHOD.");
+                newtonRoots.Add(Program.NewtonFindRoot(interval.Item1, interval.Item2, 1));
+
+                Console.WriteLine("\nMODIFIED NEWTON'S METHOD.");
+                modifiedNewtonRoots.Add(Program.ModifiedNewtonFindRoot(interval.Item1, interval.Item2));
+
+                Console.WriteLine("\nSECANT'S METHOD.");
+                secantRoots.Add(Program.SecantFindRoot(interval.Item1, interval.Item2));
             }
         }
     }
