@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
 
 namespace LaboratoryWork2
 {
@@ -25,11 +23,43 @@ namespace LaboratoryWork2
         private double Function(double x) => 1 - Math.Exp(-2 * x);
 
         /// <summary>
+        /// Created table with nodes and function values
+        /// </summary>
+        /// <param name="left">Left border of interval</param>
+        /// <param name="right">Right border of interval</param>
+        /// <param name="amountOfNodes">Amount of nodes</param>
+        /// <returns></returns>
+        public Dictionary<double, double> NodesTable(double left, double right, int amountOfNodes)
+        {
+            var table = new Dictionary<double, double>();
+            for (var i = 0; i <= amountOfNodes; i++)
+            {
+                var node = left + i * (right - left) / amountOfNodes;
+                table.Add(node, Function(node));
+            }
+            return table;
+        }
+
+        /// <summary>
+        /// Sorts and trims table with nodes according to the distance to the point in ascending order
+        /// </summary>
+        /// <param name="table">Nodes table</param>
+        /// <param name="point">Point</param>
+        /// <param name="powerOfPolynomial">Power of polynomial</param>
+        /// <returns></returns>
+        public List<KeyValuePair<double, double>> SortedNodesTable(Dictionary<double, double> table, double point, int powerOfPolynomial)
+        {
+            var sortedTable = table.OrderBy(x => Math.Abs(point - x.Key)).ToList();
+            sortedTable.RemoveRange(powerOfPolynomial + 1, sortedTable.Count - powerOfPolynomial - 1);
+            return sortedTable;
+        }
+
+        /// <summary>
         /// Calculates value of lagrange polynomial
         /// </summary>
         /// <param name="table">Table with nodes and function values in nodes</param>
         /// <returns>Value of lagrange polynomial</returns>
-        private double LagrangePolynomialValue(List<KeyValuePair<double, double>> table)
+        public double LagrangePolynomialValue(List<KeyValuePair<double, double>> table)
         {
             double value = 0;
             for (var k = 0; k <= powerOfPolynomial; k++)
@@ -77,12 +107,7 @@ namespace LaboratoryWork2
                 point = x;
             }
 
-            var table = new Dictionary<double, double>();
-            for (var i = 0; i <= amountOfNodes; i++)
-            {
-                var node = left + i * (right - left) / amountOfNodes;
-                table.Add(node, Function(node));
-            }
+            var table = NodesTable(left, right, amountOfNodes);
 
             Console.WriteLine();
             Console.WriteLine($"Interval: [{left}, {right}].");
@@ -96,15 +121,14 @@ namespace LaboratoryWork2
             Console.WriteLine($"Power of polynomial: {powerOfPolynomial}.");
             Console.WriteLine($"Point: {point}.");
 
-            var orderedTable = table.OrderBy(x => Math.Abs(point - x.Key)).ToList();
-            orderedTable.RemoveRange(powerOfPolynomial + 1, orderedTable.Count - powerOfPolynomial - 1);
+            var sortedTable = SortedNodesTable(table, point, powerOfPolynomial);
             Console.WriteLine($"\nNodes used for calculating interpolation polynomial sorted by distance to the point = {point} in ascending order:");
-            foreach (var element in orderedTable)
+            foreach (var element in sortedTable)
             {
                 Console.WriteLine(element.Key);
             }
 
-            var value = LagrangePolynomialValue(orderedTable);
+            var value = LagrangePolynomialValue(sortedTable);
             Console.WriteLine($"\nValue of lagrange polynomial in point = {point}: {value}.");
 
             Console.WriteLine($"Absolute actual error = |f(x) - Pn(x)|: {Math.Abs(Function(point) - value)}.");
