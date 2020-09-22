@@ -56,12 +56,12 @@ namespace LaboratoryWork2
             if (input)
             {
                 Console.WriteLine("\nPlease, enter the power of polynomial.");
-                Console.WriteLine($"NOTE: the power of polynomial must be less than or equal to the amount of nodes + 1 = {amountOfNodes}.");
+                Console.WriteLine($"NOTE: the power of polynomial must be less than or equal to the amount of nodes - 1 = {amountOfNodes}.");
                 var n = 0;
                 var flagN = int.TryParse(Console.ReadLine(), out n) && n > 0 && n <= amountOfNodes;
                 while (!flagN)
                 {
-                    Console.WriteLine($"Please, enter the CORRECT (int, greater than 0, less than or equal to the amount of nodes + 1 = {amountOfNodes}) power of polynomial.");
+                    Console.WriteLine($"Please, enter the CORRECT (int, greater than 0, less than or equal to the amount of nodes - 1 = {amountOfNodes}) power of polynomial.");
                     flagN = int.TryParse(Console.ReadLine(), out n) && n > 0 && n <= amountOfNodes;
                 }
                 powerOfPolynomial = n;
@@ -91,23 +91,23 @@ namespace LaboratoryWork2
             Console.WriteLine($"xj | f(xj)");
             foreach (var element in table)
             {
-                Console.WriteLine($"{element.Key} | {element.Value}.");
+                Console.WriteLine($"{element.Key} | {element.Value}");
             }
             Console.WriteLine($"Power of polynomial: {powerOfPolynomial}.");
             Console.WriteLine($"Point: {point}.");
 
             var orderedTable = table.OrderBy(x => Math.Abs(point - x.Key)).ToList();
             orderedTable.RemoveRange(powerOfPolynomial + 1, orderedTable.Count - powerOfPolynomial - 1);
-            Console.WriteLine("\nNodes used for calculating interpolation polynomial:");
+            Console.WriteLine($"\nNodes used for calculating interpolation polynomial sorted by distance to the point = {point} in ascending order:");
             foreach (var element in orderedTable)
             {
                 Console.WriteLine(element.Key);
             }
 
             var value = LagrangePolynomialValue(orderedTable);
-            Console.WriteLine($"Value of lagrange polynomial in point = {point}: {value}.");
+            Console.WriteLine($"\nValue of lagrange polynomial in point = {point}: {value}.");
 
-            Console.WriteLine($"|f(x) - Pn(x)| = {Math.Abs(Function(point) - value)}.");
+            Console.WriteLine($"Absolute actual error = |f(x) - Pn(x)|: {Math.Abs(Function(point) - value)}.");
         }
 
         /// <summary>

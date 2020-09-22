@@ -9,7 +9,7 @@ namespace LaboratoryWork2
             var lagrangeInterpolation = new LagrangeInterpolation();
             lagrangeInterpolation.Start();
             var input = "";
-            Console.WriteLine("\nDo you want to enter new values of the power of polynomial and point?");
+            Console.WriteLine("\nDo you want to enter new values of the power of polynomial and point? Y/N");
             input = Console.ReadLine();
             while (input != "Y" && input != "N")
             {
@@ -19,7 +19,7 @@ namespace LaboratoryWork2
             while (input == "Y")
             {
                 lagrangeInterpolation.Process(true);
-                Console.WriteLine("\nDo you want to enter new values of the power of polynomial and point?");
+                Console.WriteLine("\nDo you want to enter new values of the power of polynomial and point? Y/N");
                 input = Console.ReadLine();
                 while (input != "Y" && input != "N")
                 {
