@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LaboratoryWork3
+namespace LaboratoryWork2_2
 {
     /// <summary>
     /// Newton interpolation

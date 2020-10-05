@@ -1,9 +1,9 @@
-using LaboratoryWork3;
+using LaboratoryWork2_2;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace LaboratoryWork3Tests
+namespace LaboratoryWork2_2Tests
 {
     public class NewtonInterpolationTests
     {
