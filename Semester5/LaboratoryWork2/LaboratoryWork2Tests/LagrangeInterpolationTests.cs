@@ -50,23 +50,23 @@ namespace LaboratoryWork2Tests
         [Test]
         public void SortedNodesTableTest()
         {
-            var table1 = lagrangeInterpolation.NodesTable(left, right, amountOfNodes);
-            var sortedTable1 = lagrangeInterpolation.SortedNodesTable(table1, point, powerOfPolynomial);
+            var table = lagrangeInterpolation.NodesTable(left, right, amountOfNodes);
+            var sortedTable = lagrangeInterpolation.SortedNodesTable(table, point, powerOfPolynomial);
 
-            Assert.IsTrue(sortedTable1.Contains(new KeyValuePair<double, double>(0.6, 0.6988057880877978)));
-            Assert.IsTrue(sortedTable1.Contains(new KeyValuePair<double, double>(0.4, 0.5506710358827784)));
-            Assert.IsFalse(sortedTable1.Contains(new KeyValuePair<double, double>(1, 0.8646647167633873)));
-            Assert.IsFalse(sortedTable1.Contains(new KeyValuePair<double, double>(0.9, 0.9333333333333333)));
-            Assert.IsFalse(sortedTable1.Contains(new KeyValuePair<double, double>(0.06666666666666667, 0.12482668095705252)));
+            Assert.IsTrue(sortedTable.Contains(new KeyValuePair<double, double>(0.6, 0.6988057880877978)));
+            Assert.IsTrue(sortedTable.Contains(new KeyValuePair<double, double>(0.4, 0.5506710358827784)));
+            Assert.IsFalse(sortedTable.Contains(new KeyValuePair<double, double>(1, 0.8646647167633873)));
+            Assert.IsFalse(sortedTable.Contains(new KeyValuePair<double, double>(0.9, 0.9333333333333333)));
+            Assert.IsFalse(sortedTable.Contains(new KeyValuePair<double, double>(0.06666666666666667, 0.12482668095705252)));
         }
 
         [Test]
         public void LagrangePolynomialValueTest()
         {
             var table = lagrangeInterpolation.NodesTable(left, right, amountOfNodes);
+            var orderedTable = lagrangeInterpolation.SortedNodesTable(table, point, powerOfPolynomial);
 
-            var orderedTable1 = lagrangeInterpolation.SortedNodesTable(table, point, powerOfPolynomial);
-            Assert.That(lagrangeInterpolation.LagrangePolynomialValue(orderedTable1), Is.EqualTo(Function(point)).Within(Math.Pow(10, -10)));
+            Assert.That(lagrangeInterpolation.LagrangePolynomialValue(orderedTable), Is.EqualTo(Function(point)).Within(Math.Pow(10, -10)));
         }
     }
 }

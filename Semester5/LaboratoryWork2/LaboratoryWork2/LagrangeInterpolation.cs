@@ -46,7 +46,7 @@ namespace LaboratoryWork2
         /// <param name="table">Nodes table</param>
         /// <param name="point">Point</param>
         /// <param name="powerOfPolynomial">Power of polynomial</param>
-        /// <returns></returns>
+        /// <returns>Table with sorted nodes</returns>
         public List<KeyValuePair<double, double>> SortedNodesTable(Dictionary<double, double> table, double point, int powerOfPolynomial)
         {
             var sortedTable = table.OrderBy(x => Math.Abs(point - x.Key)).ToList();
