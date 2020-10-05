@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace LaboratoryWork3
+namespace LaboratoryWork2_2
 {
     public class Program
     {
         public static void Main()
         {
-            var lagrangeInterpolation = new NewtonInterpolation();
-            lagrangeInterpolation.Start();
+            var newtonInterpolation = new NewtonInterpolation();
+            newtonInterpolation.Start();
             var input = "";
             Console.WriteLine("\nDo you want to enter new values of the power of polynomial and point? Y/N");
             input = Console.ReadLine();
@@ -18,7 +18,7 @@ namespace LaboratoryWork3
             }
             while (input == "Y")
             {
-                lagrangeInterpolation.Process(true);
+                newtonInterpolation.Process(true);
                 Console.WriteLine("\nDo you want to enter new values of the power of polynomial and point? Y/N");
                 input = Console.ReadLine();
                 while (input != "Y" && input != "N")
