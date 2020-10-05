@@ -6,6 +6,7 @@ init:
 environment:
   matrix:
   - solution: Semester5/LaboratoryWork1/LaboratoryWork1.sln
+  - solution: Semester5/LaboratoryWork2/LaboratoryWork2.sln
 
 before_build:
   - nuget restore %solution%
