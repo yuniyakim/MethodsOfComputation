@@ -7,7 +7,7 @@ namespace LaboratoryWork3._2
     {
         private double left = 0; // a
         private int amountOfNodes = 0; // m
-        private int partition = 0; // h
+        private double partition = 0; // h
 
         /// <summary>
         /// Function
@@ -60,12 +60,12 @@ namespace LaboratoryWork3._2
                 amountOfNodes = m;
 
                 Console.WriteLine("\nPlease, enter desired partition.");
-                var part = 0;
-                var flagPart = int.TryParse(Console.ReadLine(), out part) && part > 0;
+                double part = 0;
+                var flagPart = double.TryParse(Console.ReadLine(), out part) && part > 0;
                 while (!flagPart)
                 {
-                    Console.WriteLine($"Please, enter the CORRECT (int, greater than 0) desired partition.");
-                    flagPart = int.TryParse(Console.ReadLine(), out part) && part > 0;
+                    Console.WriteLine($"Please, enter the CORRECT (double, greater than 0) desired partition.");
+                    flagPart = double.TryParse(Console.ReadLine(), out part) && part > 0;
                 }
                 partition = part;
             }
@@ -87,15 +87,15 @@ namespace LaboratoryWork3._2
                 table[i][1] = Function(point);
                 if (i == 0)
                 {
-                    table[i][2] = (-3 * Function(point) + 4 * Function(point + partition) - Function(point + 2 * partition)) / 2 * partition;
+                    table[i][2] = (-3 * Function(point) + 4 * Function(point + partition) - Function(point + 2 * partition)) / (2 * partition);
                 }
                 else if (i == amountOfNodes)
                 {
-                    table[i][2] = (3 * Function(point) - 4 * Function(point - partition) + Function(point - 2 * partition)) / 2 * partition;
+                    table[i][2] = (3 * Function(point) - 4 * Function(point - partition) + Function(point - 2 * partition)) / (2 * partition);
                 }
                 else
                 {
-                    table[i][2] = (Function(point + partition) - Function(point - partition)) / 2 * partition;
+                    table[i][2] = (Function(point + partition) - Function(point - partition)) / (2 * partition);
                     table[i][4] = (Function(point + partition) - 2 * Function(point) + Function(point - partition)) / (partition * partition);
                     table[i][5] = Math.Abs(SecondDerivative(point) - table[i][4]);
                 }
