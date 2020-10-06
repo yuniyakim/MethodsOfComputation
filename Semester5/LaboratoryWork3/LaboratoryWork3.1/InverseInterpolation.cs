@@ -124,7 +124,7 @@ namespace LaboratoryWork3_1
         /// </summary>
         /// <param name="currentPoint">Given point</param>
         /// <returns>Newton polynomial's value</returns>
-        public double NewtonPolynomialValueInPoint(double currentPoint)
+        public double NewtonPolynomialValueInPoint(double currentPoint, double left, double right)
         {
             var table = NodesTable(left, right, amountOfNodes, false);
             var sortedTable = SortedNodesTable(table, point, powerOfPolynomial);
@@ -150,11 +150,11 @@ namespace LaboratoryWork3_1
             var intervals = new List<(double, double)>();
             var x1 = left;
             var x2 = x1 + h;
-            var y1 = NewtonPolynomialValueInPoint(x1) - point;
+            var y1 = NewtonPolynomialValueInPoint(x1, x1, x2) - point;
             double y2 = 0;
             while (x2 <= right)
             {
-                y2 = NewtonPolynomialValueInPoint(x2) - point;
+                y2 = NewtonPolynomialValueInPoint(x2, x1, x2) - point;
                 if (y1 * y2 <= 0)
                 {
                     intervals.Add((x1, x2));
@@ -194,7 +194,7 @@ namespace LaboratoryWork3_1
             while (localRight - localLeft > 2 * epsilon)
             {
                 middle = (localRight + localLeft) / 2;
-                if ((NewtonPolynomialValueInPoint(localLeft) - point) * (NewtonPolynomialValueInPoint(middle) - point) <= 0)
+                if ((NewtonPolynomialValueInPoint(localLeft, localLeft, localRight) - point) * (NewtonPolynomialValueInPoint(middle, localLeft, localRight) - point) <= 0)
                 {
                     localRight = middle;
                 }

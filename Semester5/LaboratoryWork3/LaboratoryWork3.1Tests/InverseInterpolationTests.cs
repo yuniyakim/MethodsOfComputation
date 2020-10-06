@@ -77,7 +77,7 @@ namespace LaboratoryWork3_1Tests
             for (var i = 0; i < 500; i++)
             {
                 var currentPoint = random.NextDouble();
-                Assert.That(interpolation.NewtonPolynomialValueInPoint(currentPoint), Is.EqualTo(Function(currentPoint)).Within(Math.Pow(10, -4)));
+                Assert.That(interpolation.NewtonPolynomialValueInPoint(currentPoint, left, right), Is.EqualTo(Function(currentPoint)).Within(Math.Pow(10, -4)));
             }
         }
     }
