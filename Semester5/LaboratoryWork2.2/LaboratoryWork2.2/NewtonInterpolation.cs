@@ -110,6 +110,29 @@ namespace LaboratoryWork2_2
         }
 
         /// <summary>
+        /// Calculates value of lagrange polynomial
+        /// </summary>
+        /// <param name="table">Table with nodes and function values in nodes</param>
+        /// <returns>Value of lagrange polynomial</returns>
+        public double LagrangePolynomialValue(List<KeyValuePair<double, double>> table)
+        {
+            double value = 0;
+            for (var k = 0; k <= powerOfPolynomial; k++)
+            {
+                double coefficient = 1;
+                for (var i = 0; i <= powerOfPolynomial; i++)
+                {
+                    if (i != k)
+                    {
+                        coefficient = coefficient * (point - table[i].Key) / (table[k].Key - table[i].Key);
+                    }
+                }
+                value += coefficient * table[k].Value;
+            }
+            return value;
+        }
+
+        /// <summary>
         /// Starts the main process
         /// </summary>
         /// <param name="input">Shows if input is needed</param>
@@ -161,10 +184,15 @@ namespace LaboratoryWork2_2
             }
 
             var dividedDifferences = DividedDifferences(sortedTable);
-            var value = NewtonPolynomialValue(sortedTable, dividedDifferences);
-            Console.WriteLine($"\nValue of Newton polynomial in point = {point}: {value}.");
+            var valueNewton = NewtonPolynomialValue(sortedTable, dividedDifferences);
+            Console.WriteLine($"\nValue of Newton polynomial in point = {point}: {valueNewton}.");
+            Console.WriteLine($"Absolute actual error = |f(x) - Pn(x)|: {Math.Abs(Function(point) - valueNewton)}.");
 
-            Console.WriteLine($"Absolute actual error = |f(x) - Pn(x)|: {Math.Abs(Function(point) - value)}.");
+            Console.WriteLine();
+
+            var valueLagrange = LagrangePolynomialValue(sortedTable);
+            Console.WriteLine($"\nValue of Lagrange polynomial in point = {point}: {valueLagrange}.");
+            Console.WriteLine($"Absolute actual error = |f(x) - Pn(x)|: {Math.Abs(Function(point) - valueLagrange)}.");
         }
 
         /// <summary>
