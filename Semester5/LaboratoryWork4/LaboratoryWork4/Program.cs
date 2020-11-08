@@ -6,7 +6,27 @@ namespace LaboratoryWork4
     {
         public static void Main()
         {
-            Console.WriteLine("Hello World!");
+            var quadratureFormula= new QuadratureFormula();
+            quadratureFormula.Start();
+            var input = "";
+            Console.WriteLine("\nDo you want to enter new values of left border, right border and amount of intervals? Y/N");
+            input = Console.ReadLine();
+            while (input != "Y" && input != "N")
+            {
+                Console.WriteLine("Please, enter Y or N.");
+                input = Console.ReadLine();
+            }
+            while (input == "Y")
+            {
+                quadratureFormula.Process();
+                Console.WriteLine("\nDo you want to enter new values of left border, right border and amount of intervals? Y/N");
+                input = Console.ReadLine();
+                while (input != "Y" && input != "N")
+                {
+                    Console.WriteLine("Please, enter Y or N.");
+                    input = Console.ReadLine();
+                }
+            }
         }
     }
 }
