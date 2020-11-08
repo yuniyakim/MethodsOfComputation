@@ -98,9 +98,8 @@ namespace LaboratoryWork4
         /// Left rectangles compound quadrature formula
         /// </summary>
         /// <param name="function">Given function</param>
-        /// <param name="integral">Function's integral</param>
         /// <returns>Formula's value</returns>
-        public double LeftRectangles(Func<double, double> function, Func<double, double> integral)
+        public double LeftRectangles(Func<double, double> function)
         {
             double sum = 0;
             for (var i = 1; i <= amountOfIntervals; i++)
@@ -114,9 +113,8 @@ namespace LaboratoryWork4
         /// Right rectangles compound quadrature formula
         /// </summary>
         /// <param name="function">Given function</param>
-        /// <param name="integral">Function's integral</param>
         /// <returns>Formula's value</returns>
-        public double RightRectangles(Func<double, double> function, Func<double, double> integral)
+        public double RightRectangles(Func<double, double> function)
         {
             double sum = 0;
             for (var i = 1; i <= amountOfIntervals; i++)
@@ -130,9 +128,8 @@ namespace LaboratoryWork4
         /// Middle rectangles compound quadrature formula
         /// </summary>
         /// <param name="function">Given function</param>
-        /// <param name="integral">Function's integral</param>
         /// <returns>Formula's value</returns>
-        public double MiddleRectangles(Func<double, double> function, Func<double, double> integral)
+        public double MiddleRectangles(Func<double, double> function)
         {
             double sum = 0;
             for (var i = 1; i <= amountOfIntervals; i++)
@@ -140,6 +137,21 @@ namespace LaboratoryWork4
                 sum += function(left + delta / 2 + (i - 1) * delta);
             }
             return sum * delta;
+        }
+
+        /// <summary>
+        /// Trapezium compound quadrature formula
+        /// </summary>
+        /// <param name="function">Given function</param>
+        /// <returns>Formula's value</returns>
+        public double Trapezium(Func<double, double> function)
+        {
+            double sum = function(left) + function(right);
+            for (var i = 1; i < amountOfIntervals; i++)
+            {
+                sum += 2 * function(left + delta * i);
+            }
+            return sum * (right - left) / (2 * amountOfIntervals);
         }
 
         /// <summary>
