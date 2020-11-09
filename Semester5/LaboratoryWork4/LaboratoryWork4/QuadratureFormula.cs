@@ -193,9 +193,11 @@ namespace LaboratoryWork4
             functions.Add((SecondDegreePolynomailFunction, secondDegreePolynomailFunction, SecondDegreePolynomailFunctionIntegral));
             functions.Add((ThirdDegreePolynomailFunction, thirdDegreePolynomailFunction, ThirdDegreePolynomailFunctionIntegral));
 
-            for (var i = 0; i < 4; i++)
+            Console.WriteLine();
+
+            for (var i = 1; i < 5; i++)
             {
-                var integral = functions[i].Item3(right - left);
+                var integral = functions[i].Item3(right) - functions[i].Item3(left);
                 Console.WriteLine($"Integration interval: [{left}, {right}].");
                 Console.WriteLine($"Amount of intervals = m: {amountOfIntervals}.");
                 Console.WriteLine($"Delta = h: {delta}.");
@@ -205,7 +207,7 @@ namespace LaboratoryWork4
 
                 sumY = 0;
                 sumP = functions[i].Item1(left);
-                for (var j = 1; i < amountOfIntervals; i++)
+                for (var j = 1; j < amountOfIntervals; j++)
                 {
                     sumY += functions[i].Item1(left + delta * j);
                     sumP += functions[i].Item1(left + delta * j + (delta / 2));
@@ -213,7 +215,7 @@ namespace LaboratoryWork4
 
                 Console.WriteLine($"LEFT RECTANGLES FORMULA");
                 Console.WriteLine($"Formula's value = J(h): {LeftRectangles(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - LeftRectangles(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - LeftRectangles(functions[i].Item1))}");
                 if (i == 0)
                 {
                     Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2}");
@@ -222,7 +224,7 @@ namespace LaboratoryWork4
 
                 Console.WriteLine($"RIGHT RECTANGLES FORMULA");
                 Console.WriteLine($"Formula's value = J(h): {RightRectangles(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - RightRectangles(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - RightRectangles(functions[i].Item1))}");
                 if (i == 0)
                 {
                     Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2}");
@@ -231,7 +233,7 @@ namespace LaboratoryWork4
 
                 Console.WriteLine($"MIDDLE RECTANGLES FORMULA");
                 Console.WriteLine($"Formula's value = J(h): {MiddleRectangles(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - MiddleRectangles(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - MiddleRectangles(functions[i].Item1))}");
                 if (i == 0)
                 {
                     Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(functions[i].Item1(right)) / 24}");
@@ -240,7 +242,7 @@ namespace LaboratoryWork4
 
                 Console.WriteLine($"TRAPEZIUM FORMULA");
                 Console.WriteLine($"Formula's value = J(h): {Trapezium(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - Trapezium(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Trapezium(functions[i].Item1))}");
                 if (i == 0)
                 {
                     Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(functions[i].Item1(right)) / 12}");
@@ -249,7 +251,7 @@ namespace LaboratoryWork4
 
                 Console.WriteLine($"SIMPSON'S FORMULA");
                 Console.WriteLine($"Formula's value = J(h): {Simpson(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - Simpson(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Simpson(functions[i].Item1))}");
                 if (i == 0)
                 {
                     Console.WriteLine($"Theoretical error: {Math.Pow(delta, 4) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2880}");
