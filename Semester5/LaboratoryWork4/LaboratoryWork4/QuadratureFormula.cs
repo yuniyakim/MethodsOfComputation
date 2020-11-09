@@ -14,6 +14,8 @@ namespace LaboratoryWork4
         private double right; // B
         private int amountOfIntervals; // m
         private double delta; // h
+        private double sumY;
+        private double sumP;
 
         private readonly string zeroDegreePolynomailFunction = "f(x) = 6";
 
@@ -23,8 +25,6 @@ namespace LaboratoryWork4
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
         private double ZeroDegreePolynomailFunction(double x) => 6;
-
-        private readonly string zeroDegreePolynomailFunctionIntegral = "J(x) = 6 * x";
 
         /// <summary>
         /// Function of zero degree polynomial
@@ -42,8 +42,6 @@ namespace LaboratoryWork4
         /// <returns>Value of function</returns>
         private double FirstDegreePolynomailFunction(double x) => 4 * x + 8;
 
-        private readonly string firstDegreePolynomailFunctionIntegral = "J(x) = 2 * x ^ 2 + 8 * x";
-
         /// <summary>
         /// Function of first degree polynomial
         /// </summary>
@@ -60,8 +58,6 @@ namespace LaboratoryWork4
         /// <returns>Value of function</returns>
         private double SecondDegreePolynomailFunction(double x) => 3 * x * x - 2 * x + 7;
 
-        private readonly string secondDegreePolynomailFunctionIntegral = "J(x) = x ^ 3 - x ^ 2 + 7 * x";
-
         /// <summary>
         /// Function of second degree polynomial
         /// </summary>
@@ -77,8 +73,6 @@ namespace LaboratoryWork4
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
         private double ThirdDegreePolynomailFunction(double x) => 8* x * x * x - 3 * x * x + 4 * x - 10;
-
-        private readonly string thirdDegreePolynomailFunctionIntegral = "J(x) = 2 * x ^ 4 - x ^ 3 + 2 * x ^ 2 - 10 * x";
 
         /// <summary>
         /// Function of third degree polynomial
@@ -99,60 +93,35 @@ namespace LaboratoryWork4
         /// </summary>
         /// <param name="function">Given function</param>
         /// <returns>Formula's value</returns>
-        public double LeftRectangles(Func<double, double> function)
-        {
-            double sum = 0;
-            for (var i = 1; i <= amountOfIntervals; i++)
-            {
-                sum += function(left + (i - 1) * delta);
-            }
-            return sum * delta;
-        }
+        public double LeftRectangles(Func<double, double> function) => (sumY + function(left)) * delta;
 
         /// <summary>
         /// Right rectangles compound quadrature formula
         /// </summary>
         /// <param name="function">Given function</param>
         /// <returns>Formula's value</returns>
-        public double RightRectangles(Func<double, double> function)
-        {
-            double sum = 0;
-            for (var i = 1; i <= amountOfIntervals; i++)
-            {
-                sum += function(left + delta + (i - 1) * delta);
-            }
-            return sum * delta;
-        }
+        public double RightRectangles(Func<double, double> function) => (sumY + function(right)) * delta;
 
         /// <summary>
         /// Middle rectangles compound quadrature formula
         /// </summary>
         /// <param name="function">Given function</param>
         /// <returns>Formula's value</returns>
-        public double MiddleRectangles(Func<double, double> function)
-        {
-            double sum = 0;
-            for (var i = 1; i <= amountOfIntervals; i++)
-            {
-                sum += function(left + delta / 2 + (i - 1) * delta);
-            }
-            return sum * delta;
-        }
+        public double MiddleRectangles(Func<double, double> function) => delta * sumP;
 
         /// <summary>
         /// Trapezium compound quadrature formula
         /// </summary>
         /// <param name="function">Given function</param>
         /// <returns>Formula's value</returns>
-        public double Trapezium(Func<double, double> function)
-        {
-            double sum = function(left) + function(right);
-            for (var i = 1; i < amountOfIntervals; i++)
-            {
-                sum += 2 * function(left + delta * i);
-            }
-            return sum * (right - left) / (2 * amountOfIntervals);
-        }
+        public double Trapezium(Func<double, double> function) => ((function(left) + function(right)) / 2 + sumY) * delta;
+
+        /// <summary>
+        /// Simpson's compound quadrature formula
+        /// </summary>
+        /// <param name="function">Given function</param>
+        /// <returns>Formula's value</returns>
+        public double Simpson(Func<double, double> function) => (4 * sumP + function(left) + function(right) + 2 * sumY) * delta / 6;
 
         /// <summary>
         /// Starts program
@@ -203,11 +172,11 @@ namespace LaboratoryWork4
 
             delta = (right - left) / amountOfIntervals;
 
-            var functions = new List<(Func<double, double>, string, Func<double, double>, string)>();
-            functions.Add((ZeroDegreePolynomailFunction, zeroDegreePolynomailFunction, ZeroDegreePolynomailFunctionIntegral, zeroDegreePolynomailFunctionIntegral));
-            functions.Add((FirstDegreePolynomailFunction, firstDegreePolynomailFunction, FirstDegreePolynomailFunctionIntegral, firstDegreePolynomailFunctionIntegral));
-            functions.Add((SecondDegreePolynomailFunction, secondDegreePolynomailFunction, SecondDegreePolynomailFunctionIntegral, secondDegreePolynomailFunctionIntegral));
-            functions.Add((ThirdDegreePolynomailFunction, thirdDegreePolynomailFunction, ThirdDegreePolynomailFunctionIntegral, thirdDegreePolynomailFunctionIntegral));
+            var functions = new List<(Func<double, double>, string, Func<double, double>)>();
+            functions.Add((ZeroDegreePolynomailFunction, zeroDegreePolynomailFunction, ZeroDegreePolynomailFunctionIntegral));
+            functions.Add((FirstDegreePolynomailFunction, firstDegreePolynomailFunction, FirstDegreePolynomailFunctionIntegral));
+            functions.Add((SecondDegreePolynomailFunction, secondDegreePolynomailFunction, SecondDegreePolynomailFunctionIntegral));
+            functions.Add((ThirdDegreePolynomailFunction, thirdDegreePolynomailFunction, ThirdDegreePolynomailFunctionIntegral));
 
             for (var i = 0; i < 4; i++)
             {
@@ -215,8 +184,15 @@ namespace LaboratoryWork4
                 Console.WriteLine($"Amount of intervals = m: {amountOfIntervals}.");
                 Console.WriteLine($"Delta = h: {delta}.");
                 Console.WriteLine($"Function: {functions[i].Item2}.");
-                Console.WriteLine($"Integral: {functions[i].Item4}.");
+                Console.WriteLine($"Value of integral: {functions[i].Item3(right - left)}.");
 
+                sumY = 0;
+                sumP = functions[i].Item1(left);
+                for (var j = 1; i < amountOfIntervals; i++)
+                {
+                    sumY += functions[i].Item1(left + delta * j);
+                    sumP += functions[i].Item1(left + delta * j + (delta / 2));
+                }
             }
         }
     }
