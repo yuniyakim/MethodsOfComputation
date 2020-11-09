@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
 namespace LaboratoryWork4
 {
@@ -17,7 +15,23 @@ namespace LaboratoryWork4
         private double sumY;
         private double sumP;
 
-        private readonly string zeroDegreePolynomailFunction = "f(x) = 6";
+        private readonly string someFunction = "e ^ x";
+
+        /// <summary>
+        /// Function of zero degree polynomial
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>Value of function</returns>
+        private double SomeFunction(double x) => Math.Pow(Math.E, x);
+
+        /// <summary>
+        /// Function of zero degree polynomial
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>Value of function</returns>
+        private double SomeFunctionIntegral(double x) => Math.Pow(Math.E, x);
+
+        private readonly string zeroDegreePolynomailFunction = "6";
 
         /// <summary>
         /// Function of zero degree polynomial
@@ -33,7 +47,7 @@ namespace LaboratoryWork4
         /// <returns>Value of function</returns>
         private double ZeroDegreePolynomailFunctionIntegral(double x) => 6 * x;
 
-        private readonly string firstDegreePolynomailFunction = "f(x) = 4 * x + 8";
+        private readonly string firstDegreePolynomailFunction = "4 * x + 8";
 
         /// <summary>
         /// Function of first degree polynomial
@@ -49,7 +63,7 @@ namespace LaboratoryWork4
         /// <returns>Value of function</returns>
         private double FirstDegreePolynomailFunctionIntegral(double x) => 2 * x * x + 8 * x;
 
-        private readonly string secondDegreePolynomailFunction = "f(x) = 3 * x ^ 2 - 2 * x + 7";
+        private readonly string secondDegreePolynomailFunction = "3 * x ^ 2 - 2 * x + 7";
 
         /// <summary>
         /// Function of second degree polynomial
@@ -65,7 +79,7 @@ namespace LaboratoryWork4
         /// <returns>Value of function</returns>
         private double SecondDegreePolynomailFunctionIntegral(double x) => x * x * x - x * x + 7 * x;
 
-        private readonly string thirdDegreePolynomailFunction = "f(x) = 8 * x ^ 3 - 3 * x ^ 2 + 4 * x - 10";
+        private readonly string thirdDegreePolynomailFunction = "8 * x ^ 3 - 3 * x ^ 2 + 4 * x - 10";
 
         /// <summary>
         /// Function of third degree polynomial
@@ -173,6 +187,7 @@ namespace LaboratoryWork4
             delta = (right - left) / amountOfIntervals;
 
             var functions = new List<(Func<double, double>, string, Func<double, double>)>();
+            functions.Add((SomeFunction, someFunction, SomeFunctionIntegral));
             functions.Add((ZeroDegreePolynomailFunction, zeroDegreePolynomailFunction, ZeroDegreePolynomailFunctionIntegral));
             functions.Add((FirstDegreePolynomailFunction, firstDegreePolynomailFunction, FirstDegreePolynomailFunctionIntegral));
             functions.Add((SecondDegreePolynomailFunction, secondDegreePolynomailFunction, SecondDegreePolynomailFunctionIntegral));
@@ -180,11 +195,13 @@ namespace LaboratoryWork4
 
             for (var i = 0; i < 4; i++)
             {
+                var integral = functions[i].Item3(right - left);
                 Console.WriteLine($"Integration interval: [{left}, {right}].");
                 Console.WriteLine($"Amount of intervals = m: {amountOfIntervals}.");
                 Console.WriteLine($"Delta = h: {delta}.");
-                Console.WriteLine($"Function: {functions[i].Item2}.");
-                Console.WriteLine($"Value of integral: {functions[i].Item3(right - left)}.");
+                Console.WriteLine($"Function = f(x): {functions[i].Item2}.");
+                Console.WriteLine($"Value of integral = J: {integral}.");
+                Console.WriteLine();
 
                 sumY = 0;
                 sumP = functions[i].Item1(left);
@@ -193,6 +210,52 @@ namespace LaboratoryWork4
                     sumY += functions[i].Item1(left + delta * j);
                     sumP += functions[i].Item1(left + delta * j + (delta / 2));
                 }
+
+                Console.WriteLine($"LEFT RECTANGLES FORMULA");
+                Console.WriteLine($"Formula's value = J(h): {LeftRectangles(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - LeftRectangles(functions[i].Item1)}");
+                if (i == 0)
+                {
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2}");
+                }
+                Console.WriteLine();
+
+                Console.WriteLine($"RIGHT RECTANGLES FORMULA");
+                Console.WriteLine($"Formula's value = J(h): {RightRectangles(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - RightRectangles(functions[i].Item1)}");
+                if (i == 0)
+                {
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2}");
+                }
+                Console.WriteLine();
+
+                Console.WriteLine($"MIDDLE RECTANGLES FORMULA");
+                Console.WriteLine($"Formula's value = J(h): {MiddleRectangles(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - MiddleRectangles(functions[i].Item1)}");
+                if (i == 0)
+                {
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(functions[i].Item1(right)) / 24}");
+                }
+                Console.WriteLine();
+
+                Console.WriteLine($"TRAPEZIUM FORMULA");
+                Console.WriteLine($"Formula's value = J(h): {Trapezium(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - Trapezium(functions[i].Item1)}");
+                if (i == 0)
+                {
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(functions[i].Item1(right)) / 12}");
+                }
+                Console.WriteLine();
+
+                Console.WriteLine($"SIMPSON'S FORMULA");
+                Console.WriteLine($"Formula's value = J(h): {Simpson(functions[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {integral - Simpson(functions[i].Item1)}");
+                if (i == 0)
+                {
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 4) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2880}");
+                }
+                Console.WriteLine();
+                Console.WriteLine();
             }
         }
     }
