@@ -206,8 +206,8 @@ namespace LaboratoryWork4
                 Console.WriteLine();
 
                 sumY = 0;
-                sumP = functions[i].Item1(left);
-                for (var j = 1; j < amountOfIntervals; j++)
+                sumP = functions[i].Item1(left + (delta / 2));
+                for (double j = 1; j < amountOfIntervals; j++)
                 {
                     sumY += functions[i].Item1(left + delta * j);
                     sumP += functions[i].Item1(left + delta * j + (delta / 2));
