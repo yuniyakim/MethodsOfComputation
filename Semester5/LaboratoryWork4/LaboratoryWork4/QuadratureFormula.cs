@@ -18,18 +18,34 @@ namespace LaboratoryWork4
         private readonly string someFunction = "e ^ x";
 
         /// <summary>
-        /// Function of zero degree polynomial
+        /// Some function
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
         private double SomeFunction(double x) => Math.Pow(Math.E, x);
 
         /// <summary>
-        /// Function of zero degree polynomial
+        /// Some function's integral
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
         private double SomeFunctionIntegral(double x) => Math.Pow(Math.E, x);
+
+        private readonly string anotherFunction = "1.27 * x ^ 5 + 2.04 * x";
+
+        /// <summary>
+        /// Another function
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>Value of function</returns>
+        private double AnotherFunction(double x) => 1.27 * Math.Pow(x, 5) + 2.04 * x;
+
+        /// <summary>
+        /// Another function's integral
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>Value of function</returns>
+        private double AnotherFunctionIntegral(double x) => 1.27 / 6 * Math.Pow(x, 6) + 2.04 / 2 * x * x;
 
         private readonly string zeroDegreePolynomailFunction = "6";
 
@@ -41,7 +57,7 @@ namespace LaboratoryWork4
         private double ZeroDegreePolynomailFunction(double x) => 6;
 
         /// <summary>
-        /// Function of zero degree polynomial
+        /// Function's of zero degree polynomial integral
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
@@ -57,7 +73,7 @@ namespace LaboratoryWork4
         private double FirstDegreePolynomailFunction(double x) => 4 * x + 8;
 
         /// <summary>
-        /// Function of first degree polynomial
+        /// Function's of first degree polynomial integral
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
@@ -73,7 +89,7 @@ namespace LaboratoryWork4
         private double SecondDegreePolynomailFunction(double x) => 3 * x * x - 2 * x + 7;
 
         /// <summary>
-        /// Function of second degree polynomial
+        /// Function's of second degree polynomial integral
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
@@ -89,18 +105,11 @@ namespace LaboratoryWork4
         private double ThirdDegreePolynomailFunction(double x) => 8* x * x * x - 3 * x * x + 4 * x - 10;
 
         /// <summary>
-        /// Function of third degree polynomial
+        /// Function's of third degree polynomial integral
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
         private double ThirdDegreePolynomailFunctionIntegral(double x) => 2 * x * x * x * x - x * x * x + 2 * x * x - 10 * x;
-
-        /// <summary>
-        /// Function of weight
-        /// </summary>
-        /// <param name="x">Argument</param>
-        /// <returns>Value of function</returns>
-        private double WeightFunction(double x) => 1;
 
         /// <summary>
         /// Left rectangles compound quadrature formula
@@ -188,6 +197,7 @@ namespace LaboratoryWork4
 
             var functions = new List<(Func<double, double>, string, Func<double, double>)>();
             functions.Add((SomeFunction, someFunction, SomeFunctionIntegral));
+            functions.Add((AnotherFunction, anotherFunction, AnotherFunctionIntegral));
             functions.Add((ZeroDegreePolynomailFunction, zeroDegreePolynomailFunction, ZeroDegreePolynomailFunctionIntegral));
             functions.Add((FirstDegreePolynomailFunction, firstDegreePolynomailFunction, FirstDegreePolynomailFunctionIntegral));
             functions.Add((SecondDegreePolynomailFunction, secondDegreePolynomailFunction, SecondDegreePolynomailFunctionIntegral));
@@ -195,7 +205,7 @@ namespace LaboratoryWork4
 
             Console.WriteLine();
 
-            for (var i = 1; i < 5; i++)
+            for (var i = 1; i < 6; i++)
             {
                 var integral = functions[i].Item3(right) - functions[i].Item3(left);
                 Console.WriteLine($"Integration interval: [{left}, {right}].");
