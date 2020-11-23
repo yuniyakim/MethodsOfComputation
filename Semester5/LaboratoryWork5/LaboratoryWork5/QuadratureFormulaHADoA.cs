@@ -12,6 +12,7 @@ namespace LaboratoryWork5
         private double right = 1; // B
         private int amountOfIntervals = 100; // m
         private double delta; // h
+        private double sumP;
         private double mLeft = -1;
         private double mRight = 1;
         private double mAmountOfNodes = 7; // N
@@ -53,39 +54,38 @@ namespace LaboratoryWork5
         private double MWeightFunction(double x) => 1 / Math.Sqrt(1 - x);
 
         /// <summary>
-        /// Left rectangles compound quadrature formula
+        /// Moment's 0 function
         /// </summary>
-        /// <param name="function">Given function</param>
-        /// <returns>Formula's value</returns>
-        public double LeftRectangles(Func<double, double> function) => (sumY + function(left)) * delta;
+        /// <param name="x">Argument</param>
+        /// <returns>Value of moment's 0 function</returns>
+        private double Moment0(double x) => WeightFunction(x);
 
         /// <summary>
-        /// Right rectangles compound quadrature formula
+        /// Moment's 1 function
         /// </summary>
-        /// <param name="function">Given function</param>
-        /// <returns>Formula's value</returns>
-        public double RightRectangles(Func<double, double> function) => (sumY + function(right)) * delta;
+        /// <param name="x">Argument</param>
+        /// <returns>Value of moment's 1 function</returns>
+        private double Moment1(double x) => WeightFunction(x) * x;
+
+        /// <summary>
+        /// Moment's 2 function
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>Value of moment's 2 function</returns>
+        private double Moment2(double x) => WeightFunction(x) * x * x;
+
+        /// <summary>
+        /// Moment's 3 function
+        /// </summary>
+        /// <param name="x">Argument</param>
+        /// <returns>Value of moment's 3 function</returns>
+        private double Moment3(double x) => WeightFunction(x) * x * x * x;
 
         /// <summary>
         /// Middle rectangles compound quadrature formula
         /// </summary>
-        /// <param name="function">Given function</param>
         /// <returns>Formula's value</returns>
-        public double MiddleRectangles(Func<double, double> function) => delta * sumP;
-
-        /// <summary>
-        /// Trapezium compound quadrature formula
-        /// </summary>
-        /// <param name="function">Given function</param>
-        /// <returns>Formula's value</returns>
-        public double Trapezium(Func<double, double> function) => ((function(left) + function(right)) / 2 + sumY) * delta;
-
-        /// <summary>
-        /// Simpson's compound quadrature formula
-        /// </summary>
-        /// <param name="function">Given function</param>
-        /// <returns>Formula's value</returns>
-        public double Simpson(Func<double, double> function) => (4 * sumP + function(left) + function(right) + 2 * sumY) * delta / 6;
+        public double MiddleRectangles() => delta * sumP;
 
         /// <summary>
         /// Starts program
@@ -184,78 +184,85 @@ namespace LaboratoryWork5
                 amountOfIntervals = m;
             }
 
-            delta = (right - left) / amountOfIntervals;
+            delta = (right - left) / 100000;
 
-            var functions = new List<(Func<double, double>, string, Func<double, double>)>();
-            functions.Add((SomeFunction, someFunction, SomeFunctionIntegral));
-            functions.Add((AnotherFunction, anotherFunction, AnotherFunctionIntegral));
-            functions.Add((ZeroDegreePolynomailFunction, zeroDegreePolynomailFunction, ZeroDegreePolynomailFunctionIntegral));
-            functions.Add((FirstDegreePolynomailFunction, firstDegreePolynomailFunction, FirstDegreePolynomailFunctionIntegral));
-            functions.Add((SecondDegreePolynomailFunction, secondDegreePolynomailFunction, SecondDegreePolynomailFunctionIntegral));
-            functions.Add((ThirdDegreePolynomailFunction, thirdDegreePolynomailFunction, ThirdDegreePolynomailFunctionIntegral));
+            var moments = new List<(Func<double, double>, double)>();
+            moments.Add((Moment0, 0));
+            moments.Add((Moment1, 0));
+            moments.Add((Moment2, 0));
+            moments.Add((Moment3, 0));
 
             Console.WriteLine();
 
+            for (var i = 0; i <= 3; i++)
+            {
+                sumP = moments[i].Item1(left + (delta / 2));
+                for (double j = 1; j < amountOfIntervals; j++)
+                {
+                    sumP += Function(left + delta * j + (delta / 2));
+                }
+                moments[i] = (moments[i].Item1, MiddleRectangles());
+            }
+
             for (var i = 1; i < 6; i++)
             {
-                var integral = functions[i].Item3(right) - functions[i].Item3(left);
+                var integral = moments[i].Item3(right) - moments[i].Item3(left);
                 Console.WriteLine($"Integration interval: [{left}, {right}].");
                 Console.WriteLine($"Amount of intervals = m: {amountOfIntervals}.");
                 Console.WriteLine($"Delta = h: {delta}.");
-                Console.WriteLine($"Function = f(x): {functions[i].Item2}.");
+                Console.WriteLine($"Function = f(x): {moments[i].Item2}.");
                 Console.WriteLine($"Value of integral = J: {integral}.");
                 Console.WriteLine();
 
                 sumY = 0;
-                sumP = functions[i].Item1(left + (delta / 2));
+                sumP = moments[i].Item1(left + (delta / 2));
                 for (double j = 1; j < amountOfIntervals; j++)
                 {
-                    sumY += functions[i].Item1(left + delta * j);
-                    sumP += functions[i].Item1(left + delta * j + (delta / 2));
+                    sumP += Function(left + delta * j + (delta / 2));
                 }
 
                 Console.WriteLine($"LEFT RECTANGLES FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {LeftRectangles(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - LeftRectangles(functions[i].Item1))}");
+                Console.WriteLine($"Formula's value = J(h): {LeftRectangles(moments[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - LeftRectangles(moments[i].Item1))}");
                 if (i == 0)
                 {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2}");
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(moments[i].Item1(right)) / 2}");
                 }
                 Console.WriteLine();
 
                 Console.WriteLine($"RIGHT RECTANGLES FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {RightRectangles(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - RightRectangles(functions[i].Item1))}");
+                Console.WriteLine($"Formula's value = J(h): {RightRectangles(moments[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - RightRectangles(moments[i].Item1))}");
                 if (i == 0)
                 {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2}");
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(moments[i].Item1(right)) / 2}");
                 }
                 Console.WriteLine();
 
                 Console.WriteLine($"MIDDLE RECTANGLES FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {MiddleRectangles(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - MiddleRectangles(functions[i].Item1))}");
+                Console.WriteLine($"Formula's value = J(h): {MiddleRectangles(moments[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - MiddleRectangles(moments[i].Item1))}");
                 if (i == 0)
                 {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(functions[i].Item1(right)) / 24}");
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(moments[i].Item1(right)) / 24}");
                 }
                 Console.WriteLine();
 
                 Console.WriteLine($"TRAPEZIUM FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {Trapezium(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Trapezium(functions[i].Item1))}");
+                Console.WriteLine($"Formula's value = J(h): {Trapezium(moments[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Trapezium(moments[i].Item1))}");
                 if (i == 0)
                 {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(functions[i].Item1(right)) / 12}");
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(moments[i].Item1(right)) / 12}");
                 }
                 Console.WriteLine();
 
                 Console.WriteLine($"SIMPSON'S FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {Simpson(functions[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Simpson(functions[i].Item1))}");
+                Console.WriteLine($"Formula's value = J(h): {Simpson(moments[i].Item1)}");
+                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Simpson(moments[i].Item1))}");
                 if (i == 0)
                 {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 4) * (right - left) * Math.Abs(functions[i].Item1(right)) / 2880}");
+                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 4) * (right - left) * Math.Abs(moments[i].Item1(right)) / 2880}");
                 }
                 Console.WriteLine();
                 Console.WriteLine();
