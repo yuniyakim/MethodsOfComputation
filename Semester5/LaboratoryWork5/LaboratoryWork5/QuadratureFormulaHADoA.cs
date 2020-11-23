@@ -204,6 +204,27 @@ namespace LaboratoryWork5
                 moments[i] = (moments[i].Item1, MiddleRectangles());
             }
 
+            var a1 = (moments[0].Item2 * moments[3].Item2 - moments[2].Item2 * moments[1].Item2) / 
+                (moments[1].Item2 * moments[1].Item2 - moments[2].Item2 * moments[0].Item2);
+            var a2 = (moments[2].Item2 * moments[2].Item2 - moments[3].Item2 * moments[1].Item2) /
+                (moments[1].Item2 * moments[1].Item2 - moments[2].Item2 * moments[0].Item2);
+
+            double root1 = (-a1 + Math.Sqrt(a1 * a1 - 4 * a2)) / 2;
+            double root2 = (-a1 - Math.Sqrt(a1 * a1 - 4 * a2)) / 2;
+
+            if (root1 <= left || root1 >= right || root2 <= left || root2 >= right)
+            {
+                throw new ArithmeticException("Invalid roots.");
+            }
+
+            double coefficient1 = (moments[1].Item2 - root2 * moments[0].Item2) / (root1 - root2);
+            double coefficient2 = (moments[1].Item2 - root1 * moments[0].Item2) / (root2 - root1);
+
+            if (coefficient1 + coefficient2 - moments[0].Item2 > Math.Pow(10, -8))
+            {
+                throw new ArithmeticException("Invalid coefficients");
+            }
+
             for (var i = 1; i < 6; i++)
             {
                 var integral = moments[i].Item3(right) - moments[i].Item3(left);
