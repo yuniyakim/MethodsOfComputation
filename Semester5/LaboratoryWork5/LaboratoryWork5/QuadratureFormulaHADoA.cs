@@ -184,6 +184,11 @@ namespace LaboratoryWork5
                 amountOfIntervals = m;
             }
 
+
+
+            Console.WriteLine();
+            Console.WriteLine();
+
             delta = (right - left) / 100000;
 
             var moments = new List<(Func<double, double>, double)>();
@@ -202,92 +207,30 @@ namespace LaboratoryWork5
                     sumP += Function(left + delta * j + (delta / 2));
                 }
                 moments[i] = (moments[i].Item1, MiddleRectangles());
+                Console.WriteLine($"Moment {i}: {moments[i].Item2}.");
             }
 
             var a1 = (moments[0].Item2 * moments[3].Item2 - moments[2].Item2 * moments[1].Item2) / 
                 (moments[1].Item2 * moments[1].Item2 - moments[2].Item2 * moments[0].Item2);
             var a2 = (moments[2].Item2 * moments[2].Item2 - moments[3].Item2 * moments[1].Item2) /
                 (moments[1].Item2 * moments[1].Item2 - moments[2].Item2 * moments[0].Item2);
+            Console.WriteLine($"Orthogonal polynomial: x^2 + {a1} * x + {a2}.");
 
             double root1 = (-a1 + Math.Sqrt(a1 * a1 - 4 * a2)) / 2;
             double root2 = (-a1 - Math.Sqrt(a1 * a1 - 4 * a2)) / 2;
-
             if (root1 <= left || root1 >= right || root2 <= left || root2 >= right)
             {
                 throw new ArithmeticException("Invalid roots.");
             }
+            Console.WriteLine($"Nodes of compound formula: {root1}, {root2}.");
 
             double coefficient1 = (moments[1].Item2 - root2 * moments[0].Item2) / (root1 - root2);
             double coefficient2 = (moments[1].Item2 - root1 * moments[0].Item2) / (root2 - root1);
-
             if (coefficient1 + coefficient2 - moments[0].Item2 > Math.Pow(10, -8))
             {
                 throw new ArithmeticException("Invalid coefficients");
             }
-
-            for (var i = 1; i < 6; i++)
-            {
-                var integral = moments[i].Item3(right) - moments[i].Item3(left);
-                Console.WriteLine($"Integration interval: [{left}, {right}].");
-                Console.WriteLine($"Amount of intervals = m: {amountOfIntervals}.");
-                Console.WriteLine($"Delta = h: {delta}.");
-                Console.WriteLine($"Function = f(x): {moments[i].Item2}.");
-                Console.WriteLine($"Value of integral = J: {integral}.");
-                Console.WriteLine();
-
-                sumY = 0;
-                sumP = moments[i].Item1(left + (delta / 2));
-                for (double j = 1; j < amountOfIntervals; j++)
-                {
-                    sumP += Function(left + delta * j + (delta / 2));
-                }
-
-                Console.WriteLine($"LEFT RECTANGLES FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {LeftRectangles(moments[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - LeftRectangles(moments[i].Item1))}");
-                if (i == 0)
-                {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(moments[i].Item1(right)) / 2}");
-                }
-                Console.WriteLine();
-
-                Console.WriteLine($"RIGHT RECTANGLES FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {RightRectangles(moments[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - RightRectangles(moments[i].Item1))}");
-                if (i == 0)
-                {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 1) * (right - left) * Math.Abs(moments[i].Item1(right)) / 2}");
-                }
-                Console.WriteLine();
-
-                Console.WriteLine($"MIDDLE RECTANGLES FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {MiddleRectangles(moments[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - MiddleRectangles(moments[i].Item1))}");
-                if (i == 0)
-                {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(moments[i].Item1(right)) / 24}");
-                }
-                Console.WriteLine();
-
-                Console.WriteLine($"TRAPEZIUM FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {Trapezium(moments[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Trapezium(moments[i].Item1))}");
-                if (i == 0)
-                {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 2) * (right - left) * Math.Abs(moments[i].Item1(right)) / 12}");
-                }
-                Console.WriteLine();
-
-                Console.WriteLine($"SIMPSON'S FORMULA");
-                Console.WriteLine($"Formula's value = J(h): {Simpson(moments[i].Item1)}");
-                Console.WriteLine($"Absolute actual error = |J - J(h)|: {Math.Abs(integral - Simpson(moments[i].Item1))}");
-                if (i == 0)
-                {
-                    Console.WriteLine($"Theoretical error: {Math.Pow(delta, 4) * (right - left) * Math.Abs(moments[i].Item1(right)) / 2880}");
-                }
-                Console.WriteLine();
-                Console.WriteLine();
-            }
+            Console.WriteLine($"Coefficients of compound formula: {coefficient1}, {coefficient2}.");
         }
     }
 }
