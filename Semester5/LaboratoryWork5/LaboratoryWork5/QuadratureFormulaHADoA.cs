@@ -42,16 +42,16 @@ namespace LaboratoryWork5
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double MFunction(double x) => (Math.Cos(3 * x)) / (0.3 + x * x);
+        private double MFunction(double x) => Math.Cos(3 * x) / (0.3 + x * x);
 
-        private readonly string mWeightFunction = "1 / sqrt(1 - x)";
+        private readonly string mWeightFunction = "1 / sqrt(1 - x^2)";
 
         /// <summary>
         /// Meler Weight function
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of weight function</returns>
-        private double MWeightFunction(double x) => 1 / Math.Sqrt(1 - x);
+        private double MWeightFunction(double x) => 1 / Math.Sqrt(1 - x * x);
 
         /// <summary>
         /// Moment's 0 function
@@ -186,7 +186,15 @@ namespace LaboratoryWork5
 
             Console.WriteLine();
 
-            double sum = 0;
+            Console.WriteLine($"Integration interval: [{left}, {right}].");
+            Console.WriteLine($"Amount of intervals = m: {amountOfIntervals}.");
+            Console.WriteLine($"Function = f(x): {function}.");
+            Console.WriteLine($"Weight function = p(x): {weightFunction}.");
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            double result = 0;
             delta = (right - left) / amountOfIntervals;
 
             for (var i = 0; i <= amountOfIntervals - 1; i++)
@@ -195,10 +203,10 @@ namespace LaboratoryWork5
                 var b = left + (i + 1) * delta;
                 var argument1 = delta * (1 / Math.Sqrt(3)) / 2 + a + delta / 2;
                 var argument2 = delta * (-1 / Math.Sqrt(3)) / 2 +a + delta / 2;
-                sum += (b - a) * (Function(argument1) * WeightFunction(argument1) + Function(argument2) * WeightFunction(argument2)) / 2;
+                result += (b - a) * (Function(argument1) * WeightFunction(argument1) + Function(argument2) * WeightFunction(argument2)) / 2;
             }
             Console.WriteLine("GAUSS COMPOUND QUARATURE FORMULA");
-            Console.WriteLine($"INTEGRAL'S VALUE with Gauss compound quadrature formula: {sum}.");
+            Console.WriteLine($"INTEGRAL'S VALUE with Gauss compound quadrature formula: {result}.");
 
             Console.WriteLine();
             Console.WriteLine();
@@ -246,8 +254,29 @@ namespace LaboratoryWork5
             }
             Console.WriteLine($"Coefficients of compound formula: {coefficient1}, {coefficient2}.");
 
-            var result = coefficient1 * Function(root1) + coefficient2 * Function(root2);
+            result = coefficient1 * Function(root1) + coefficient2 * Function(root2);
             Console.WriteLine($"INTEGRAL'S VALUE with Gauss type quadrature formula: {result}.");
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine($"Integration interval: [{mLeft}, {mRight}].");
+            Console.WriteLine($"Amount of nodes = N: {mAmountOfNodes}.");
+            Console.WriteLine($"Function = f(x): {mFunction}.");
+            Console.WriteLine($"Weight function = p(x): {mWeightFunction}.");
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            double sum = 0;
+            for (var i = 1; i <= mAmountOfNodes; i++)
+            {
+                sum += MFunction(Math.Cos((2 * i - 1) * Math.PI / (2 * mAmountOfNodes)));
+            }
+            result = Math.PI * sum / mAmountOfNodes;
+
+            Console.WriteLine("MELER QUARATURE FORMULA");
+            Console.WriteLine($"INTEGRAL'S VALUE with Meler quadrature formula: {result}.");
         }
     }
 }
