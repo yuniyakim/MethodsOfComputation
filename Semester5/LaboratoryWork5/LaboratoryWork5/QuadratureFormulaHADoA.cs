@@ -184,10 +184,26 @@ namespace LaboratoryWork5
                 amountOfIntervals = m;
             }
 
+            Console.WriteLine();
 
+            double sum = 0;
+            delta = (right - left) / amountOfIntervals;
+
+            for (var i = 0; i <= amountOfIntervals - 1; i++)
+            {
+                var a = left + i * delta;
+                var b = left + (i + 1) * delta;
+                var argument1 = delta * (1 / Math.Sqrt(3)) / 2 + a + delta / 2;
+                var argument2 = delta * (-1 / Math.Sqrt(3)) / 2 +a + delta / 2;
+                sum += (b - a) * (Function(argument1) * WeightFunction(argument1) + Function(argument2) * WeightFunction(argument2)) / 2;
+            }
+            Console.WriteLine("GAUSS COMPOUND QUARATURE FORMULA");
+            Console.WriteLine($"INTEGRAL'S VALUE with Gauss compound quadrature formula: {sum}.");
 
             Console.WriteLine();
             Console.WriteLine();
+
+            Console.WriteLine("GAUSS TYPE QUARATURE FORMULA");
 
             delta = (right - left) / 100000;
 
@@ -197,14 +213,12 @@ namespace LaboratoryWork5
             moments.Add((Moment2, 0));
             moments.Add((Moment3, 0));
 
-            Console.WriteLine();
-
             for (var i = 0; i <= 3; i++)
             {
                 sumP = moments[i].Item1(left + (delta / 2));
-                for (double j = 1; j < amountOfIntervals; j++)
+                for (double j = 1; j < 100000; j++)
                 {
-                    sumP += Function(left + delta * j + (delta / 2));
+                    sumP += moments[i].Item1(left + delta * j + (delta / 2));
                 }
                 moments[i] = (moments[i].Item1, MiddleRectangles());
                 Console.WriteLine($"Moment {i}: {moments[i].Item2}.");
@@ -231,6 +245,9 @@ namespace LaboratoryWork5
                 throw new ArithmeticException("Invalid coefficients");
             }
             Console.WriteLine($"Coefficients of compound formula: {coefficient1}, {coefficient2}.");
+
+            var result = coefficient1 * Function(root1) + coefficient2 * Function(root2);
+            Console.WriteLine($"INTEGRAL'S VALUE with Gauss type quadrature formula: {result}.");
         }
     }
 }
