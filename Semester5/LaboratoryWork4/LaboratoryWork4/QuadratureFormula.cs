@@ -31,21 +31,21 @@ namespace LaboratoryWork4
         /// <returns>Value of function</returns>
         private double SomeFunctionIntegral(double x) => Math.Pow(Math.E, x);
 
-        private readonly string anotherFunction = "1.27 * x ^ 5 + 2.04 * x";
+        private readonly string anotherFunction = "-lnx";
 
         /// <summary>
         /// Another function
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double AnotherFunction(double x) => 1.27 * Math.Pow(x, 5) + 2.04 * x;
+        private double AnotherFunction(double x) => -Math.Log(x);
 
         /// <summary>
         /// Another function's integral
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double AnotherFunctionIntegral(double x) => 1.27 / 6 * Math.Pow(x, 6) + 2.04 / 2 * x * x;
+        private double AnotherFunctionIntegral(double x) => x - x*Math.Log(x);
 
         private readonly string zeroDegreePolynomailFunction = "6";
 
