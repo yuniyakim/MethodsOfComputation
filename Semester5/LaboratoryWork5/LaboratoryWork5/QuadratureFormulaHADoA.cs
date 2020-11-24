@@ -24,8 +24,9 @@ namespace LaboratoryWork5
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double Function(double x) => Math.Sin(x); 
-        
+        private double Function(double x) => Math.Sin(x);
+        private const double integral = 0.239812;
+
         private readonly string weightFunction = "-ln(x)";
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace LaboratoryWork5
         /// <returns>Value of weight function</returns>
         private double WeightFunction(double x) => - Math.Log(x);
 
-        private readonly string mFunction = "cos(3x) / (0,3 + x^2)";
+        private readonly string mFunction = "cos(3x) / (0.3 + x^2)";
 
         /// <summary>
         /// Meler function
@@ -52,6 +53,27 @@ namespace LaboratoryWork5
         /// <param name="x">Argument</param>
         /// <returns>Value of weight function</returns>
         private double MWeightFunction(double x) => 1 / Math.Sqrt(1 - x * x);
+        private const double mIntegral = 0.5771;
+
+        //private readonly string function = "1";
+        //private double Function(double x) => 1;
+        //private double Integral(double x) => x;
+        //private const double integral = 1;
+
+        //private readonly string function = "x";
+        //private double Function(double x) => x;
+        //private double Integral(double x) => x * x;
+        //private const double integral = 0.25;
+
+        //private readonly string function = "x ^ 2";
+        //private double Function(double x) => x * x;
+        //private double Integral(double x) => x * x * x;
+        //private const double integral = 0.11111;
+
+        //private readonly string function = "x ^ 3";
+        //private double Function(double x) => x * x * x;
+        //private double Integral(double x) => x * x * x * x;
+        //private const double integral = 0.0625;
 
         /// <summary>
         /// Moment's 0 function
@@ -109,26 +131,26 @@ namespace LaboratoryWork5
 
             if (input == "Y" || input == "y")
             {
-                Console.WriteLine("Please, enter the left border of interval.");
-                Console.WriteLine("NOTE: doubles are being entered with dot, NOT comma.");
-                double A = 0;
-                var flagA = double.TryParse(Console.ReadLine(), out A);
-                while (!flagA)
-                {
-                    Console.WriteLine("Please, enter the CORRECT (double) left border of interval.");
-                    flagA = double.TryParse(Console.ReadLine(), out A);
-                }
-                left = A;
+                //Console.WriteLine("Please, enter the left border of interval.");
+                //Console.WriteLine("NOTE: doubles are being entered with dot, NOT comma.");
+                //double A = 0;
+                //var flagA = double.TryParse(Console.ReadLine(), out A);
+                //while (!flagA)
+                //{
+                //    Console.WriteLine("Please, enter the CORRECT (double) left border of interval.");
+                //    flagA = double.TryParse(Console.ReadLine(), out A);
+                //}
+                //left = A;
 
-                Console.WriteLine("\nPlease, enter the right border of interval.");
-                double B = 0;
-                var flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
-                while (!flagB)
-                {
-                    Console.WriteLine($"Please, enter the CORRECT (double, greater than A = {A}) right border of interval.");
-                    flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
-                }
-                right = B;
+                //Console.WriteLine("\nPlease, enter the right border of interval.");
+                //double B = 0;
+                //var flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
+                //while (!flagB)
+                //{
+                //    Console.WriteLine($"Please, enter the CORRECT (double, greater than A = {A}) right border of interval.");
+                //    flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
+                //}
+                //right = B;
 
                 Console.WriteLine("\nPlease, enter amount of intervlas.");
                 var m = 0;
@@ -139,9 +161,19 @@ namespace LaboratoryWork5
                     flagM = int.TryParse(Console.ReadLine(), out m) && m > 0;
                 }
                 amountOfIntervals = m;
+
+                Console.WriteLine("\nPlease, enter amount of nodes.");
+                var l = 0;
+                var flagL = int.TryParse(Console.ReadLine(), out l) && l > 0;
+                while (!flagL)
+                {
+                    Console.WriteLine($"Please, enter the CORRECT (int, greater than 0) amount of nodes.");
+                    flagL = int.TryParse(Console.ReadLine(), out l) && l > 0;
+                }
+                mAmountOfNodes = l;
             }
 
-            Process(input == "Y" || input == "y");
+            Process(false);
         }
 
         /// <summary>
@@ -152,26 +184,26 @@ namespace LaboratoryWork5
         {
             if (input)
             {
-                Console.WriteLine("Please, enter the left border of interval.");
-                Console.WriteLine("NOTE: doubles are being entered with dot, NOT comma.");
-                double A = 0;
-                var flagA = double.TryParse(Console.ReadLine(), out A);
-                while (!flagA)
-                {
-                    Console.WriteLine("Please, enter the CORRECT (double) left border of interval.");
-                    flagA = double.TryParse(Console.ReadLine(), out A);
-                }
-                left = A;
+                //Console.WriteLine("Please, enter the left border of interval.");
+                //Console.WriteLine("NOTE: doubles are being entered with dot, NOT comma.");
+                //double A = 0;
+                //var flagA = double.TryParse(Console.ReadLine(), out A);
+                //while (!flagA)
+                //{
+                //    Console.WriteLine("Please, enter the CORRECT (double) left border of interval.");
+                //    flagA = double.TryParse(Console.ReadLine(), out A);
+                //}
+                //left = A;
 
-                Console.WriteLine("\nPlease, enter the right border of interval.");
-                double B = 0;
-                var flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
-                while (!flagB)
-                {
-                    Console.WriteLine($"Please, enter the CORRECT (double, greater than A = {A}) right border of interval.");
-                    flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
-                }
-                right = B;
+                //Console.WriteLine("\nPlease, enter the right border of interval.");
+                //double B = 0;
+                //var flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
+                //while (!flagB)
+                //{
+                //    Console.WriteLine($"Please, enter the CORRECT (double, greater than A = {A}) right border of interval.");
+                //    flagB = double.TryParse(Console.ReadLine(), out B) && B > A;
+                //}
+                //right = B;
 
                 Console.WriteLine("\nPlease, enter amount of intervlas.");
                 var m = 0;
@@ -182,6 +214,16 @@ namespace LaboratoryWork5
                     flagM = int.TryParse(Console.ReadLine(), out m) && m > 0;
                 }
                 amountOfIntervals = m;
+
+                Console.WriteLine("\nPlease, enter amount of nodes.");
+                var l = 0;
+                var flagL = int.TryParse(Console.ReadLine(), out l) && l > 0;
+                while (!flagL)
+                {
+                    Console.WriteLine($"Please, enter the CORRECT (int, greater than 0) amount of nodes.");
+                    flagL = int.TryParse(Console.ReadLine(), out l) && l > 0;
+                }
+                mAmountOfNodes = l;
             }
 
             Console.WriteLine();
@@ -207,13 +249,14 @@ namespace LaboratoryWork5
             }
             Console.WriteLine("GAUSS COMPOUND QUARATURE FORMULA");
             Console.WriteLine($"INTEGRAL'S VALUE with Gauss compound quadrature formula: {result}.");
+            Console.WriteLine($"Error: {Math.Abs(result - integral)}.");
 
             Console.WriteLine();
             Console.WriteLine();
 
             Console.WriteLine("GAUSS TYPE QUARATURE FORMULA");
 
-            delta = (right - left) / 100000;
+            delta = (right - left) / 1000000;
 
             var moments = new List<(Func<double, double>, double)>();
             moments.Add((Moment0, 0));
@@ -224,7 +267,7 @@ namespace LaboratoryWork5
             for (var i = 0; i <= 3; i++)
             {
                 sumP = moments[i].Item1(left + (delta / 2));
-                for (double j = 1; j < 100000; j++)
+                for (double j = 1; j < 1000000; j++)
                 {
                     sumP += moments[i].Item1(left + delta * j + (delta / 2));
                 }
@@ -244,18 +287,19 @@ namespace LaboratoryWork5
             {
                 throw new ArithmeticException("Invalid roots.");
             }
-            Console.WriteLine($"Nodes of compound formula: {root1}, {root2}.");
+            Console.WriteLine($"Nodes of quadrature formula: {root1}, {root2}.");
 
             double coefficient1 = (moments[1].Item2 - root2 * moments[0].Item2) / (root1 - root2);
             double coefficient2 = (moments[1].Item2 - root1 * moments[0].Item2) / (root2 - root1);
-            if (coefficient1 + coefficient2 - moments[0].Item2 > Math.Pow(10, -8))
+            if (coefficient1 + coefficient2 - moments[0].Item2 > Math.Pow(10, -15) && coefficient1 < 0 && coefficient2 < 0)
             {
                 throw new ArithmeticException("Invalid coefficients");
             }
-            Console.WriteLine($"Coefficients of compound formula: {coefficient1}, {coefficient2}.");
+            Console.WriteLine($"Coefficients of quadrature formula: {coefficient1}, {coefficient2}.");
 
             result = coefficient1 * Function(root1) + coefficient2 * Function(root2);
             Console.WriteLine($"INTEGRAL'S VALUE with Gauss type quadrature formula: {result}.");
+            Console.WriteLine($"Error: {Math.Abs(result - integral)}.");
 
             Console.WriteLine();
             Console.WriteLine();
@@ -277,6 +321,7 @@ namespace LaboratoryWork5
 
             Console.WriteLine("MELER QUARATURE FORMULA");
             Console.WriteLine($"INTEGRAL'S VALUE with Meler quadrature formula: {result}.");
+            Console.WriteLine($"Error: {Math.Abs(result - mIntegral)}.");
         }
     }
 }
