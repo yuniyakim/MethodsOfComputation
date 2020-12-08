@@ -197,7 +197,7 @@ namespace LaboratoryWork6
             {
                 var yi = (i == 0 ? y0 : results[i - 1]);
                 var xi = points[i + 2];
-                results.Add(yi + h * (-yi + Math.Sin(xi)));
+                results.Add(yi + h * (-(yi + h * (-yi + Math.Sin(xi)) / 2 ) + Math.Sin(xi + h / 2)));
             }
 
             return results;
@@ -215,7 +215,8 @@ namespace LaboratoryWork6
             {
                 var yi = (i == 0 ? y0 : results[i - 1]);
                 var xi = points[i + 2];
-                results.Add(yi + h * (-yi + Math.Sin(xi)));
+                var xi1 = points[i + 3];
+                results.Add(yi + h * ((-yi + Math.Sin(xi)) + (-(yi + h * (-yi + Math.Sin(xi))) + Math.Sin(xi1))) / 2);
             }
 
             return results;
@@ -303,17 +304,16 @@ namespace LaboratoryWork6
             Console.WriteLine($"N = {n}.");
             Console.WriteLine();
 
-            var points1 = new List<double>();
+            var points = new List<double>();
             for (var i = -2; i <= n; i++)
             {
-                points1.Add(x0 + i * h);
+                points.Add(x0 + i * h);
             }
-            var points3 = points1.GetRange(3, points1.Count - 3);
 
             var solutions = new List<double>();
             Console.WriteLine($"THE EXACT SOLUTION");
             Console.WriteLine(String.Format("{0,-25} | {1,0}", "xk", "y(xk)"));
-            foreach (var point in points1)
+            foreach (var point in points)
             {
                 var solution = Solution(point);
                 solutions.Add(solution);
@@ -323,69 +323,104 @@ namespace LaboratoryWork6
             Console.WriteLine();
             Console.WriteLine();
 
-            var taylor = Taylor(points1);
+            var taylor = Taylor(points);
             Console.WriteLine($"TAYLOR");
             Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
-            for (var i = 0; i < points1.Count; i++)
+            for (var i = 0; i < points.Count; i++)
             {
-                Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], taylor[i], Math.Abs(solutions[i] - taylor[i])));
+                Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], taylor[i], Math.Abs(solutions[i] - taylor[i])));
             }
 
             Console.WriteLine();
             Console.WriteLine();
 
-            var adams = Adams(points1, taylor);
+            var adams = Adams(points, taylor);
             Console.WriteLine($"ADAMS");
             Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
-            for (var i = 0; i < points1.Count; i++)
+            for (var i = 0; i < points.Count; i++)
             {
                 if (i < 5)
                 {
-                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], "---", "---"));
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], "---", "---"));
                 }
                 else
                 {
-                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], adams[i - 5], Math.Abs(solutions[i] - adams[i - 5])));
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], adams[i - 5], Math.Abs(solutions[i] - adams[i - 5])));
                 }
             }
 
             Console.WriteLine();
             Console.WriteLine();
 
-            var rungeKutta = RungeKutta(points1);
+            var rungeKutta = RungeKutta(points);
             Console.WriteLine($"RUNGE-KUTTA");
             Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
-            for (var i = 0; i < points1.Count; i++)
+            for (var i = 0; i < points.Count; i++)
             {
                 if (i < 3)
                 {
-                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], "---", "---"));
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], "---", "---"));
                 }
                 else
                 {
-                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], rungeKutta[i - 3], Math.Abs(solutions[i] - rungeKutta[i - 3])));
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], rungeKutta[i - 3], Math.Abs(solutions[i] - rungeKutta[i - 3])));
                 }
             }
 
             Console.WriteLine();
             Console.WriteLine();
 
-            var euler = Euler(points1);
+            var euler = Euler(points);
             Console.WriteLine($"EULER");
             Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
-            for (var i = 0; i < points1.Count; i++)
+            for (var i = 0; i < points.Count; i++)
             {
                 if (i < 3)
                 {
-                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], "---", "---"));
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], "---", "---"));
                 }
                 else
                 {
-                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], euler[i - 3], Math.Abs(solutions[i] - euler[i - 3])));
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], euler[i - 3], Math.Abs(solutions[i] - euler[i - 3])));
                 }
             }
 
             Console.WriteLine();
+            Console.WriteLine();
+
+            var euler1 = Euler1(points);
+            Console.WriteLine($"EULER");
+            Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
+            for (var i = 0; i < points.Count; i++)
+            {
+                if (i < 3)
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], "---", "---"));
+                }
+                else
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], euler1[i - 3], Math.Abs(solutions[i] - euler1[i - 3])));
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            var euler2 = Euler2(points);
+            Console.WriteLine($"EULER");
+            Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
+            for (var i = 0; i < points.Count; i++)
+            {
+                if (i < 3)
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], "---", "---"));
+                }
+                else
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points[i], euler2[i - 3], Math.Abs(solutions[i] - euler2[i - 3])));
+                }
+            }
+
             Console.WriteLine();
         }
     }
