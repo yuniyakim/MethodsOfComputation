@@ -389,7 +389,7 @@ namespace LaboratoryWork6
             Console.WriteLine();
 
             var euler1 = Euler1(points);
-            Console.WriteLine($"EULER");
+            Console.WriteLine($"EULER1");
             Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
             for (var i = 0; i < points.Count; i++)
             {
@@ -407,7 +407,7 @@ namespace LaboratoryWork6
             Console.WriteLine();
 
             var euler2 = Euler2(points);
-            Console.WriteLine($"EULER");
+            Console.WriteLine($"EULER2");
             Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
             for (var i = 0; i < points.Count; i++)
             {
