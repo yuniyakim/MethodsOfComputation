@@ -146,6 +146,82 @@ namespace LaboratoryWork6
         }
 
         /// <summary>
+        /// Calculates approximate value of solution using Runge-Kutta in given points
+        /// </summary>
+        /// <param name="points">Given points</param>
+        /// <returns>List with value of solution in points</returns>
+        public List<double> RungeKutta(List<double> points)
+        {
+            var results = new List<double>();
+            for (var i = 0; i < points.Count - 3; i++)
+            {
+                var yi = (i == 0 ? y0 : results[i - 1]);
+                var xi = points[i + 2];
+                var k1 = h * (-yi + Math.Sin(xi));
+                var k2 = h * (-(yi + k1 / 2) + Math.Sin(xi + h / 2));
+                var k3 = h * (-(yi + k2 / 2) + Math.Sin(xi + h / 2));
+                var k4 = h * (-(yi + k3) + Math.Sin(xi + h));
+                results.Add(yi + (k1 + 2 * k2 + 2 * k3 + k4) / 6);
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Calculates approximate value of solution using Euler in given points
+        /// </summary>
+        /// <param name="points">Given points</param>
+        /// <returns>List with value of solution in points</returns>
+        public List<double> Euler(List<double> points)
+        {
+            var results = new List<double>();
+            for (var i = 0; i < points.Count - 3; i++)
+            {
+                var yi = (i == 0 ? y0 : results[i - 1]);
+                var xi = points[i + 2];
+                results.Add(yi + h * (-yi + Math.Sin(xi)));
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Calculates approximate value of solution using Euler1 in given points
+        /// </summary>
+        /// <param name="points">Given points</param>
+        /// <returns>List with value of solution in points</returns>
+        public List<double> Euler1(List<double> points)
+        {
+            var results = new List<double>();
+            for (var i = 0; i < points.Count - 3; i++)
+            {
+                var yi = (i == 0 ? y0 : results[i - 1]);
+                var xi = points[i + 2];
+                results.Add(yi + h * (-yi + Math.Sin(xi)));
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Calculates approximate value of solution using Euler2 in given points
+        /// </summary>
+        /// <param name="points">Given points</param>
+        /// <returns>List with value of solution in points</returns>
+        public List<double> Euler2(List<double> points)
+        {
+            var results = new List<double>();
+            for (var i = 0; i < points.Count - 3; i++)
+            {
+                var yi = (i == 0 ? y0 : results[i - 1]);
+                var xi = points[i + 2];
+                results.Add(yi + h * (-yi + Math.Sin(xi)));
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Starts program
         /// </summary>
         public void Start()
@@ -270,6 +346,42 @@ namespace LaboratoryWork6
                 else
                 {
                     Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], adams[i - 5], Math.Abs(solutions[i] - adams[i - 5])));
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            var rungeKutta = RungeKutta(points1);
+            Console.WriteLine($"RUNGE-KUTTA");
+            Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
+            for (var i = 0; i < points1.Count; i++)
+            {
+                if (i < 3)
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], "---", "---"));
+                }
+                else
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], rungeKutta[i - 3], Math.Abs(solutions[i] - rungeKutta[i - 3])));
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            var euler = Euler(points1);
+            Console.WriteLine($"EULER");
+            Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", "xk", "yN(xk)", "|y(xk) - yN(xk)|"));
+            for (var i = 0; i < points1.Count; i++)
+            {
+                if (i < 3)
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], "---", "---"));
+                }
+                else
+                {
+                    Console.WriteLine(String.Format("{0,-25} | {1,-25} | {2,0}", points1[i], euler[i - 3], Math.Abs(solutions[i] - euler[i - 3])));
                 }
             }
 
