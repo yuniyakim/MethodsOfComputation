@@ -8,9 +8,9 @@ namespace LaboratoryWork5
     /// </summary>
     public class QuadratureFormulaHADoA
     {
-        private double left = 0; // A
+        private double left = -1; // A
         private double right = 1; // B
-        private int amountOfIntervals = 100; // m
+        private int amountOfIntervals = 5; // m
         private double delta; // h
         private double sumP;
         private double mLeft = -1;
@@ -24,7 +24,7 @@ namespace LaboratoryWork5
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double Function(double x) => Math.Sin(x);
+        private double Function(double x) => 2.175 * Math.Pow(x, 5) - 3.267 * Math.Pow(x, 2) + 6.321;
         private const double integral = 0.239812;
 
         private readonly string weightFunction = "-ln(x)";
@@ -34,7 +34,7 @@ namespace LaboratoryWork5
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of weight function</returns>
-        private double WeightFunction(double x) => - Math.Log(x);
+        private double WeightFunction(double x) => 1 / Math.Sqrt(1 - x * x);
 
         private readonly string mFunction = "cos(3x) / (0.3 + x^2)";
 
@@ -43,7 +43,7 @@ namespace LaboratoryWork5
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double MFunction(double x) => Math.Cos(3 * x) / (0.3 + x * x);
+        private double MFunction(double x) => 2.175 * Math.Pow(x, 5) - 3.267 * Math.Pow(x, 2) + 6.321;
 
         private readonly string mWeightFunction = "1 / sqrt(1 - x^2)";
 

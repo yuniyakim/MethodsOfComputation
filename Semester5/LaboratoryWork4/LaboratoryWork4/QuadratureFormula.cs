@@ -22,14 +22,14 @@ namespace LaboratoryWork4
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double SomeFunction(double x) => Math.Pow(Math.E, x);
+        private double SomeFunction(double x) => Math.Pow(x, 3) + 5;
 
         /// <summary>
         /// Some function's integral
         /// </summary>
         /// <param name="x">Argument</param>
         /// <returns>Value of function</returns>
-        private double SomeFunctionIntegral(double x) => Math.Pow(Math.E, x);
+        private double SomeFunctionIntegral(double x) => Math.Pow(x, 4) / 4 + 5 * x;
 
         private readonly string anotherFunction = "-lnx";
 
@@ -205,7 +205,7 @@ namespace LaboratoryWork4
 
             Console.WriteLine();
 
-            for (var i = 1; i < 6; i++)
+            for (var i = 0; i < 1; i++)
             {
                 var integral = functions[i].Item3(right) - functions[i].Item3(left);
                 Console.WriteLine($"Integration interval: [{left}, {right}].");
