@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using DotNumerics.LinearAlgebra;
 using Nomad.Core;
@@ -34,6 +35,7 @@ namespace Task1
         /// <summary>
         /// Calculates spectral criterion of the left matrix
         /// </summary>
+        /// <returns>Spectral criterion's value</returns>
         public double CalculateSpectralCriterion()
         {
             var matrix = new Nomad.Core.Matrix(size);
@@ -53,6 +55,7 @@ namespace Task1
         /// <summary>
         /// Calculates volumetric criterion of the left matrix
         /// </summary>
+        /// <returns>Volumetric criterion's value</returns>
         public double CalculateVolumetricCriterion()
         {
             var det = leftMatrix.Determinant();
@@ -69,6 +72,27 @@ namespace Task1
             }
 
             return det / product;
+        }
+
+        /// <summary>
+        /// Calculates angle criterion of the left matrix
+        /// </summary>
+        /// <returns>Angle criterion's value</returns>
+        public double CalculateAngleCriterion()
+        {
+            var inverse = leftMatrix.Inverse();
+            var products = new double[size];
+            for (var i = 0; i < size; i++)
+            {
+                double sum = 0;
+                for (var j = 0; j < size; j++)
+                {
+                    sum += Math.Abs(leftMatrix[i, j]) * Math.Abs(inverse[j, i]);
+                }
+                products[i] = sum;
+            }
+
+            return products.Max();
         }
     }
 }
