@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 using DotNumerics.LinearAlgebra;
-using Nomad.Core;
-using Nomad.Utility;
 
 namespace Task1
 {
@@ -12,9 +10,10 @@ namespace Task1
     /// </summary>
     public class ConditionNumber
     {
-        private DotNumerics.LinearAlgebra.Matrix leftMatrix;
-        private DotNumerics.LinearAlgebra.Matrix rightMatrix;
+        private DotNumerics.LinearAlgebra.Matrix matrix;
+        private Vector vector;
         private int size;
+        private Vector exactSolution;
 
         //public double SpectralCriterion { get; private set; }
         //public double VolumetricCriterion { get; private set; }
@@ -23,13 +22,15 @@ namespace Task1
         /// <summary>
         /// Condition number's constructor
         /// </summary>
-        /// <param name="leftMatrix"></param>
-        /// <param name="rightMatrix"></param>
-        public ConditionNumber(DotNumerics.LinearAlgebra.Matrix leftMatrix, DotNumerics.LinearAlgebra.Matrix rightMatrix)
+        /// <param name="matrix">Given matrix</param>
+        /// <param name="vector">Given vector</param>
+        /// <param name="exactSolution">Given exact solution</param>
+        public ConditionNumber(DotNumerics.LinearAlgebra.Matrix matrix, Vector vector, Vector exactSolution)
         {
-            this.leftMatrix = leftMatrix;
-            this.rightMatrix = rightMatrix;
-            size = leftMatrix.RowCount;
+            this.matrix = matrix;
+            this.vector = vector;
+            size = matrix.RowCount;
+            this.exactSolution = exactSolution;
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Task1
             {
                 for (var j = 0; j < size; j++)
                 {
-                    matrix[i, j] = leftMatrix[i, j];
+                    matrix[i, j] = this.matrix[i, j];
                 }
             }
 
@@ -58,7 +59,7 @@ namespace Task1
         /// <returns>Volumetric criterion's value</returns>
         public double CalculateVolumetricCriterion()
         {
-            var det = leftMatrix.Determinant();
+            var det = matrix.Determinant();
 
             double product = 1;
             for (var i = 0; i < size; i++)
@@ -66,7 +67,7 @@ namespace Task1
                 double sum = 0;
                 for (var j = 0; j < size; j++)
                 {
-                    sum += leftMatrix[i, j] * leftMatrix[i, j];
+                    sum += matrix[i, j] * matrix[i, j];
                 }
                 product *= Math.Sqrt(sum);
             }
@@ -80,19 +81,41 @@ namespace Task1
         /// <returns>Angle criterion's value</returns>
         public double CalculateAngleCriterion()
         {
-            var inverse = leftMatrix.Inverse();
+            var inverse = matrix.Inverse();
             var products = new double[size];
             for (var i = 0; i < size; i++)
             {
                 double sum = 0;
                 for (var j = 0; j < size; j++)
                 {
-                    sum += Math.Abs(leftMatrix[i, j]) * Math.Abs(inverse[j, i]);
+                    sum += Math.Abs(matrix[i, j]) * Math.Abs(inverse[j, i]);
                 }
                 products[i] = sum;
             }
 
             return products.Max();
+        }
+
+        /// <summary>
+        /// Varies matrix and vector in equation and calculates new solution
+        /// </summary>
+        /// <param name="variation">Variation's value</param>
+        /// <returns>Solution of varied equation</returns>
+        public Vector CalculateVariedSolution(double variation)
+        {
+            var variedMatrix = matrix;
+            var variedVector = vector;
+            for (var i = 0; i < size; i++)
+            {
+                for (var j = 0; j < size; j++)
+                {
+                    variedMatrix[i, j] += variation;
+                }
+                variedVector[i] += variation;
+            }
+
+            var solver = new LinearEquations();
+            return solver.Solve(variedMatrix, variedVector);
         }
     }
 }
