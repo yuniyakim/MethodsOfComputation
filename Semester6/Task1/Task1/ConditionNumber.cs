@@ -122,14 +122,23 @@ namespace Task1
         public void Start()
         {
             var equations = new List<(Matrix, Vector, Vector)>();
-            var matrix = new Matrix(2, 2);
-            matrix[0, 0] = -400.6;
-            matrix[0, 1] = 199.8;
-            matrix[1, 0] = 1198.8;
-            matrix[1, 1] = -600.4;
-            var vector = new Vector(new double[] { 200, -600 });
-            var exactSolution = new Vector(new double[] { -0.2, 0.6 });
-            equations.Add((matrix, vector, exactSolution));
+            var matrix1 = new Matrix(2, 2);
+            matrix1[0, 0] = -400.6;
+            matrix1[0, 1] = 199.8;
+            matrix1[1, 0] = 1198.8;
+            matrix1[1, 1] = -600.4;
+            var vector1 = new Vector(new double[] { 200, -600 });
+            var exactSolution1 = new Vector(new double[] { -0.2, 0.6 });
+            equations.Add((matrix1, vector1, exactSolution1));
+
+            var matrix2 = new Matrix(2, 2);
+            matrix2[0, 0] = 1;
+            matrix2[0, 1] = 0.99;
+            matrix2[1, 0] = 0.99;
+            matrix2[1, 1] = 0.98;
+            var vector2 = new Vector(new double[] { 2, 2 });
+            var exactSolution2 = new Vector(new double[] { 200, -200 });
+            equations.Add((matrix2, vector2, exactSolution2));
 
             foreach (var equation in equations)
             {
@@ -175,6 +184,8 @@ namespace Task1
                 Console.WriteLine($"|x - x˜| is {delta2} when variation is 0.01.");
                 Console.WriteLine($"|x - x˜| is {delta5} when variation is 0.00001.");
                 Console.WriteLine($"|x - x˜| is {delta8} when variation is 0.00000001.");
+                Console.WriteLine();
+                Console.WriteLine();
             }
         }
     }

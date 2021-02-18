@@ -1,7 +1,7 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using DotNumerics.LinearAlgebra;
-using System;
 
 namespace Task1.Tests
 {
@@ -113,6 +113,20 @@ namespace Task1.Tests
                     Assert.That(variedVector3[i], Is.EqualTo(actualVector3[i, 0]).Within(Math.Pow(10, -10)));
                 }
             }
+        }
+
+        [Test]
+        public void CriteriaBadMatrixTest()
+        {
+            var matrix = new Matrix(2, 2);
+            matrix[0, 0] = 1;
+            matrix[0, 1] = 0.99;
+            matrix[1, 0] = 0.99;
+            matrix[1, 1] = 0.98;
+            conditionNumber = new ConditionNumber(matrix, null, null);
+            Assert.IsTrue(conditionNumber.CalculateSpectralCriterion() > 10000);
+            Assert.IsTrue(conditionNumber.CalculateVolumetricCriterion() > 10000);
+            Assert.IsTrue(conditionNumber.CalculateAngleCriterion() > 10000);
         }
     }
 }
