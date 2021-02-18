@@ -33,7 +33,7 @@ namespace Task1
         }
 
         /// <summary>
-        /// Calculates spectral criterion of the left matrix
+        /// Calculates spectral criterion of the matrix
         /// </summary>
         /// <returns>Spectral criterion's value</returns>
         public double CalculateSpectralCriterion()
@@ -53,7 +53,7 @@ namespace Task1
         }
 
         /// <summary>
-        /// Calculates volumetric criterion of the left matrix
+        /// Calculates volumetric criterion of the matrix
         /// </summary>
         /// <returns>Volumetric criterion's value</returns>
         public double CalculateVolumetricCriterion()
@@ -71,11 +71,11 @@ namespace Task1
                 product *= Math.Sqrt(sum);
             }
 
-            return det / product;
+            return product / Math.Abs(det);
         }
 
         /// <summary>
-        /// Calculates angle criterion of the left matrix
+        /// Calculates angle criterion of the matrix
         /// </summary>
         /// <returns>Angle criterion's value</returns>
         public double CalculateAngleCriterion()
@@ -84,12 +84,14 @@ namespace Task1
             var products = new double[size];
             for (var i = 0; i < size; i++)
             {
-                double sum = 0;
+                double sumMatrix = 0;
+                double sumInverse = 0;
                 for (var j = 0; j < size; j++)
                 {
-                    sum += Math.Abs(matrix[i, j]) * Math.Abs(inverse[j, i]);
+                    sumMatrix += matrix[i, j] *matrix[i, j];
+                    sumInverse += inverse[j, i] * inverse[j, i];
                 }
-                products[i] = sum;
+                products[i] = Math.Sqrt(sumMatrix * sumInverse);
             }
 
             return products.Max();
@@ -120,14 +122,14 @@ namespace Task1
         public void Start()
         {
             var equations = new List<(Matrix, Vector, Vector)>();
-            Matrix leftMatrix = new Matrix(2, 2);
-            leftMatrix[0, 0] = -400.6;
-            leftMatrix[0, 1] = 199.8;
-            leftMatrix[1, 0] = 1198.8;
-            leftMatrix[1, 1] = -600.4;
-            var rightMatrix = new Vector(new double[] { 200, -600 });
+            var matrix = new Matrix(2, 2);
+            matrix[0, 0] = -400.6;
+            matrix[0, 1] = 199.8;
+            matrix[1, 0] = 1198.8;
+            matrix[1, 1] = -600.4;
+            var vector = new Vector(new double[] { 200, -600 });
             var exactSolution = new Vector(new double[] { -0.2, 0.6 });
-            equations.Add((leftMatrix, rightMatrix, exactSolution));
+            equations.Add((matrix, vector, exactSolution));
 
             foreach (var equation in equations)
             {
