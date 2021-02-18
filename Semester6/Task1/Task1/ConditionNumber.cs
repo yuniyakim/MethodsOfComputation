@@ -104,8 +104,8 @@ namespace Task1
         /// <returns>Solution of varied equation</returns>
         public Vector CalculateVariedSolution(double variation)
         {
-            var variedMatrix = matrix;
-            var variedVector = vector;
+            var variedMatrix = matrix.Clone();
+            var variedVector = vector.Clone();
             for (var i = 0; i < size; i++)
             {
                 for (var j = 0; j < size; j++)
