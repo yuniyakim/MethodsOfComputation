@@ -128,5 +128,23 @@ namespace Task1.Tests
             Assert.IsTrue(conditionNumber.CalculateVolumetricCriterion() > 10000);
             Assert.IsTrue(conditionNumber.CalculateAngleCriterion() > 10000);
         }
+
+        [Test]
+        public void CriteriaGilbertMatrixTest()
+        {
+            var matrix = new Matrix(4, 4);
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 0; j < 4; j++)
+                {
+                    matrix[i, j] = 1;
+                    matrix[i, j] /= 1 + i + j;
+                }
+            }
+            conditionNumber = new ConditionNumber(matrix, null, null);
+            Assert.IsTrue(conditionNumber.CalculateSpectralCriterion() > 10000);
+            Assert.IsTrue(conditionNumber.CalculateVolumetricCriterion() > 10000);
+            Assert.IsTrue(conditionNumber.CalculateAngleCriterion() > 1000);
+        }
     }
 }

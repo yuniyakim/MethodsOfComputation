@@ -6,8 +6,8 @@ namespace Task1
     {
         public static void Main()
         {
-            var cn = new ConditionNumber();
-            cn.Start();
+            var conditionNumber = new ConditionNumber();
+            conditionNumber.Start();
         }
     }
 }
