@@ -116,24 +116,31 @@ namespace Task1.Chart
                 var volumetricCriterion = conditionNumber.CalculateVolumetricCriterion();
                 var angleCriterion = conditionNumber.CalculateAngleCriterion();
 
+                var variedSolution1 = conditionNumber.CalculateVariedSolution(0.1);
                 var variedSolution2 = conditionNumber.CalculateVariedSolution(0.01);
-                var variedSolution5 = conditionNumber.CalculateVariedSolution(0.00001);
+                var variedSolution3 = conditionNumber.CalculateVariedSolution(0.001);
+                var difference1 = equations[i].Item3 - variedSolution1;
                 var difference2 = equations[i].Item3 - variedSolution2;
-                var difference5 = equations[i].Item3 - variedSolution5;
+                var difference3 = equations[i].Item3 - variedSolution3;
+                double delta1 = 0;
                 double delta2 = 0;
-                double delta5 = 0;
+                double delta3 = 0;
                 for (var j = 0; j < equations[i].Item1.RowCount; j++)
                 {
+                    delta1 += difference1[j] * difference1[j];
                     delta2 += difference2[j] * difference2[j];
-                    delta5 += difference5[j] * difference5[j];
+                    delta3 += difference3[j] * difference3[j];
                 }
+                delta1 = Math.Sqrt(delta1);
                 delta2 = Math.Sqrt(delta2);
-                delta5 = Math.Sqrt(delta5);
+                delta3 = Math.Sqrt(delta3);
 
                 // red dots
-                series[i].Points.Add(new ScatterPoint(spectralCriterion, delta2, 3, 1));
+                series[i].Points.Add(new ScatterPoint(spectralCriterion, delta1, 3, 1));
+                // green dots
+                series[i].Points.Add(new ScatterPoint(spectralCriterion, delta2, 3, 0.4));
                 // black dots
-                series[i].Points.Add(new ScatterPoint(spectralCriterion, delta5, 3, 0));
+                series[i].Points.Add(new ScatterPoint(spectralCriterion, delta3, 3, 0));
                 Model.Series.Add(series[i]);
             }
         }
