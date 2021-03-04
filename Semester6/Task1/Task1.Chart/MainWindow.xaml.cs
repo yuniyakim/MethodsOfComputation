@@ -104,7 +104,15 @@ namespace Task1.Chart
                     matrix7[i, j] /= 1 + i + j;
                 }
             }
-            var vector7 = new DotNumerics.LinearAlgebra.Vector(new double[] { 5279 / 420, 3743 / 420, 17771 / 2520, 47 / 8, 139999 / 27720, 30743 / 6930, 129697 / 32760 });
+
+            var vector7 = new DotNumerics.LinearAlgebra.Vector(new double[] { 1, 1, 1, 1, 1, 1, 1 });
+            vector7[0] = vector7[0] * 5699 / 420;
+            vector7[1] = vector7[1] * 4103 / 420;
+            vector7[2] = vector7[2] * 19661 / 2520;
+            vector7[3] = vector7[3] * 157 / 24;
+            vector7[4] = vector7[4] * 156631 / 27720;
+            vector7[5] = vector7[5] * 34523 / 6930;
+            vector7[6] = vector7[6] * 146077 / 32760;
             var exactSolution7 = new DotNumerics.LinearAlgebra.Vector(new double[] { 2, 9, 4, 7, 11, 9, 2 });
             equations.Add((matrix7, vector7, exactSolution7));
 
