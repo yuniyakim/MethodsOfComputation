@@ -25,6 +25,8 @@ namespace Task1.Chart
         {
             Model = new PlotModel { Title = "Chart" };
             Model.Axes.Add(new LinearColorAxis { Position = AxisPosition.None, Minimum = 0.1, Maximum = 0.9, HighColor = OxyColors.Red, LowColor = OxyColors.Black });
+            Model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = "Condition number", FontSize = 14 });
+            Model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = "Solutions difference", FontSize = 14 });
 
             var series = new ScatterSeries[8];
             series[0] = new ScatterSeries { MarkerType = MarkerType.Circle };
@@ -106,7 +108,7 @@ namespace Task1.Chart
             var exactSolution7 = new DotNumerics.LinearAlgebra.Vector(new double[] { 2, 9, 4, 7, 11, 9, 2 });
             equations.Add((matrix7, vector7, exactSolution7));
 
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 7; i++)
             {
                 var conditionNumber = new ConditionNumber(equations[i].Item1, equations[i].Item2, equations[i].Item3);
 
