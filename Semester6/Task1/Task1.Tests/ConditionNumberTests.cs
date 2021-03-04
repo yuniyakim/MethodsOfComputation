@@ -106,6 +106,10 @@ namespace Task1.Tests
                 var actualVector1 = variedMatrix1 * variedSolution1;
                 var actualVector2 = variedMatrix2 * variedSolution2;
                 var actualVector3 = variedMatrix3 * variedSolution3;
+
+                Assert.IsTrue(conditionNumber.CalculateSpectralCriterion() < 10000);
+                Assert.IsTrue(conditionNumber.CalculateVolumetricCriterion() < 10000);
+                Assert.IsTrue(conditionNumber.CalculateAngleCriterion() < 10000);
                 for (var i = 0; i < conditionNumber.size; i++)
                 {
                     Assert.That(variedVector1[i], Is.EqualTo(actualVector1[i, 0]).Within(Math.Pow(10, -10)));
