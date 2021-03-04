@@ -149,9 +149,18 @@ namespace Task1
                     matrix3[i, j] /= 1 + i + j;
                 }
             }
-            var vector3 = new Vector(new double[] { 2, 9, 4, 7, 11, 9, 2});
-            var exactSolution3 = new Vector(new double[] { 5279 / 420, 3743 / 420, 17771 / 2520, 47 / 8, 139999 / 27720, 30743 / 6930, 129697 / 32760 });
+            var vector3 = new Vector(new double[] { 5279 / 420, 3743 / 420, 17771 / 2520, 47 / 8, 139999 / 27720, 30743 / 6930, 129697 / 32760 });
+            var exactSolution3 = new Vector(new double[] { 2, 9, 4, 7, 11, 9, 2 });
             equations.Add((matrix3, vector3, exactSolution3));
+
+            var matrix4 = new Matrix(2, 2);
+            matrix4[0, 0] = -41;
+            matrix4[0, 1] = 127;
+            matrix4[1, 0] = 113;
+            matrix4[1, 1] = -60;
+            var vector4 = new Vector(new double[] { -787, 1589 });
+            var exactSolution4 = new Vector(new double[] { 13, -2 });
+            equations.Add((matrix4, vector4, exactSolution4));
 
             foreach (var equation in equations)
             {
