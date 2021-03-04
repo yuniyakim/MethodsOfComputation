@@ -132,10 +132,10 @@ namespace Task1.Tests
         [Test]
         public void CriteriaGilbertMatrixTest()
         {
-            var matrix = new Matrix(4, 4);
-            for (var i = 0; i < 4; i++)
+            var matrix = new Matrix(6, 6);
+            for (var i = 0; i < 6; i++)
             {
-                for (var j = 0; j < 4; j++)
+                for (var j = 0; j < 6; j++)
                 {
                     matrix[i, j] = 1;
                     matrix[i, j] /= 1 + i + j;
@@ -144,7 +144,7 @@ namespace Task1.Tests
             conditionNumber = new ConditionNumber(matrix, null, null);
             Assert.IsTrue(conditionNumber.CalculateSpectralCriterion() > 10000);
             Assert.IsTrue(conditionNumber.CalculateVolumetricCriterion() > 10000);
-            Assert.IsTrue(conditionNumber.CalculateAngleCriterion() > 1000);
+            Assert.IsTrue(conditionNumber.CalculateAngleCriterion() > 10000);
         }
     }
 }

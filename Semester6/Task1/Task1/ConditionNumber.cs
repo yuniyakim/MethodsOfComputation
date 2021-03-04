@@ -140,18 +140,35 @@ namespace Task1
             var exactSolution2 = new Vector(new double[] { 200, -200 });
             equations.Add((matrix2, vector2, exactSolution2));
 
+            var matrix3 = new Matrix(7, 7);
+            for (var i = 0; i < 7; i++)
+            {
+                for (var j = 0; j < 7; j++)
+                {
+                    matrix3[i, j] = 1;
+                    matrix3[i, j] /= 1 + i + j;
+                }
+            }
+            var vector3 = new Vector(new double[] { 2, 9, 4, 7, 11, 9, 2});
+            var exactSolution3 = new Vector(new double[] { 5279 / 420, 3743 / 420, 17771 / 2520, 47 / 8, 139999 / 27720, 30743 / 6930, 129697 / 32760 });
+            equations.Add((matrix3, vector3, exactSolution3));
+
             foreach (var equation in equations)
             {
                 var conditionNumber = new ConditionNumber(equation.Item1, equation.Item2, equation.Item3);
                 Console.WriteLine("Left matrix is");
                 Console.WriteLine(equation.Item1.MatrixToString());
                 Console.WriteLine("Right matrix is");
-                Console.WriteLine(equation.Item2[0]);
-                Console.WriteLine(equation.Item2[1]);
+                for (var i = 0; i < equation.Item1.RowCount; i++)
+                {
+                    Console.WriteLine(equation.Item2[i]);
+                }
                 Console.WriteLine();
                 Console.WriteLine("Exact solution is");
-                Console.WriteLine(equation.Item3[0]);
-                Console.WriteLine(equation.Item3[1]);
+                for (var i = 0; i < equation.Item1.RowCount; i++)
+                {
+                    Console.WriteLine(equation.Item3[i]);
+                }
 
                 var spectralCriterion = conditionNumber.CalculateSpectralCriterion();
                 var volumetricCriterion = conditionNumber.CalculateVolumetricCriterion();
