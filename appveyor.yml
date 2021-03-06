@@ -8,6 +8,7 @@ environment:
   - solution: Semester5/LaboratoryWork1/LaboratoryWork1.sln
   - solution: Semester5/LaboratoryWork2/LaboratoryWork2.sln
   - solution: Semester5/LaboratoryWork2.2/LaboratoryWork2.2.sln
+  - solution: Semester6/Task1/Task1.sln
 
 before_build:
   - nuget restore %solution%
