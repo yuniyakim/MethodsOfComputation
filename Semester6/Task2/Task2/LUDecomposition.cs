@@ -42,7 +42,7 @@ namespace Task2
                     {
                         lMatrix[i, j] = (i == j) ? 1 : 0;
                         double sum = 0;
-                        for (var k = 0; k < i -1; k++)
+                        for (var k = 0; k < i; k++)
                         {
                             sum += lMatrix[i, k] * uMatrix[k, j];
                         }
@@ -52,11 +52,11 @@ namespace Task2
                     {
                         uMatrix[i, j] = 0;
                         double sum = 0;
-                        for (var k = 0; k < j - 1; k++)
+                        for (var k = 0; k < j; k++)
                         {
                             sum += lMatrix[i, k] * uMatrix[k, j];
                         }
-                        lMatrix[i, j] = (matrix[i, j] - sum) / lMatrix[j, j];
+                        lMatrix[i, j] = (matrix[i, j] - sum) / uMatrix[j, j];
                     }
                 }
             }
