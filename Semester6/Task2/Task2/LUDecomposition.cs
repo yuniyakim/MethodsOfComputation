@@ -56,7 +56,7 @@ namespace Task2
                         {
                             sum += lMatrix[i, k] * uMatrix[k, j];
                         }
-                        lMatrix[i, j] = (matrix[i, j] - sum) / lMatrix[i, i];
+                        lMatrix[i, j] = (matrix[i, j] - sum) / lMatrix[j, j];
                     }
                 }
             }
@@ -65,6 +65,37 @@ namespace Task2
 
         public void Start()
         {
+            var aMatrix = new Matrix(3);
+            var size = aMatrix.RowCount;
+            //aMatrix[0, 0] = -400.6;
+            //aMatrix[0, 1] = 199.8;
+            //aMatrix[1, 0] = 1198.8;
+            //aMatrix[1, 1] = -600.4;
+            aMatrix[0, 0] = 1;
+            aMatrix[0, 1] = 2;
+            aMatrix[0, 2] = 4;
+            aMatrix[1, 0] = 3;
+            aMatrix[1, 1] = 8;
+            aMatrix[1, 2] = 14;
+            aMatrix[2, 0] = 2;
+            aMatrix[2, 1] = 6;
+            aMatrix[2, 2] = 13;
+
+            var luDecomposition = new LUDecomposition(aMatrix);
+            var luMatrices = luDecomposition.CalculateLUMatrices();
+            var lMatrix = luMatrices.Item1;
+            var uMatrix = luMatrices.Item2;
+            var luMatrix = lMatrix * uMatrix;
+            Console.WriteLine(aMatrix.MatrixToString());
+            Console.WriteLine(lMatrix.MatrixToString());
+            Console.WriteLine(uMatrix.MatrixToString());
+            Console.WriteLine(luMatrix.MatrixToString());
+            //for (var i = 0; i < size; i++)
+            //{
+            //    for (var j = 0; j < size; j++)
+            //    {
+            //    }
+            //}
             //var equations = new List<(Matrix, Vector, Vector)>();
             //var matrix1 = new Matrix(2, 2);
             //matrix1[0, 0] = -400.6;
