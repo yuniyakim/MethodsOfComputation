@@ -11,6 +11,8 @@ namespace Task2
     public class LUDecomposition
     {
         private Matrix matrix;
+        private Vector vector;
+        private Vector exactSolution;
 
         public int size { get; private set; }
 
@@ -24,6 +26,20 @@ namespace Task2
         {
             this.matrix = matrix;
             size = matrix.RowCount;
+        }
+
+        /// <summary>
+        /// LU decmposition's constructor
+        /// </summary>
+        /// <param name="matrix">Given matrix</param>
+        /// <param name="vector">Given vector</param>
+        /// <param name="exactSolution">Given exact solution</param>
+        public LUDecomposition(Matrix matrix, Vector vector, Vector exactSolution)
+        {
+            this.matrix = matrix;
+            this.vector = vector;
+            size = matrix.RowCount;
+            this.exactSolution = exactSolution;
         }
 
         /// <summary>
@@ -61,6 +77,37 @@ namespace Task2
                 }
             }
             return (lMatrix, uMatrix);
+        }
+
+        public Vector SolveEquationWithLUDecomposition()
+        {
+            var luMatrices = CalculateLUMatrices();
+            var lMatrix = luMatrices.Item1;
+            var uMatrix = luMatrices.Item2;
+
+            var ySolution = new Vector(size);
+            for (var i = 0; i < size; i++)
+            {
+                double sum = 0;
+                for (var j = 0; j < i; j++)
+                {
+                    sum += lMatrix[i, j] * ySolution[j];
+                }
+                ySolution[i] = vector[i] - sum;
+            }
+
+            var xSolution = new Vector(size);
+            for (var i = 0; i < size; i++)
+            {
+                double sum = 0;
+                for (var j = 0; j < i; j++)
+                {
+                    sum += uMatrix[size - i - 1, size - j - 1] * xSolution[size - j - 1];
+                }
+                xSolution[size - i - 1] = (vector[size - i - 1] - sum) / uMatrix[size - i - 1, size - i - 1];
+            }
+
+            return xSolution;
         }
 
         public void Start()
