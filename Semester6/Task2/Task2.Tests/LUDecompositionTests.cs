@@ -92,7 +92,7 @@ namespace Task2.Tests
         }
 
         [Test]
-        public void SolveEquationWithLUDecompositionTest()
+        public void SolveEquationTest()
         {
             var matrix = new Matrix(2);
             var size = matrix.RowCount;
@@ -108,6 +108,82 @@ namespace Task2.Tests
             for (var i = 0; i < size; i++)
             {
                 Assert.That(solution[i], Is.EqualTo(exactSolution[i]).Within(Math.Pow(10, -10)));
+            }
+        }
+
+        [Test]
+        public void SolveEquationWithBadMatrixTest()
+        {
+            var matrix = new Matrix(2);
+            var size = matrix.RowCount;
+            matrix[0, 0] = 1;
+            matrix[0, 1] = 0.99;
+            matrix[1, 0] = 0.99;
+            matrix[1, 1] = 0.98;
+            var vector = new Vector(new double[] { -0.393, -0.389 });
+            var exactSolution = new Vector(new double[] { 0.3, -0.7 });
+
+            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            var solution = luDecomposition.SolveEquationWithLUDecomposition();
+            for (var i = 0; i < size; i++)
+            {
+                Assert.That(solution[i], Is.EqualTo(exactSolution[i]).Within(Math.Pow(10, -10)));
+            }
+        }
+
+        [Test]
+        public void SolveEquationWithDiagonalMatrixTest()
+        {
+            var matrix = new Matrix(3);
+            var size = matrix.RowCount;
+            matrix[0, 0] = -400.6;
+            matrix[0, 1] = 0;
+            matrix[0, 2] = 0;
+            matrix[1, 0] = 0;
+            matrix[1, 1] = -600.4;
+            matrix[1, 2] = 0;
+            matrix[2, 0] = 0;
+            matrix[2, 1] = 0;
+            matrix[2, 2] = 200.2;
+            var vector = new Vector(new double[] { -200.3, 120.08, 80.08 });
+            var exactSolution = new Vector(new double[] { 0.5, -0.2, 0.4 });
+
+            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            var solution = luDecomposition.SolveEquationWithLUDecomposition();
+            for (var i = 0; i < size; i++)
+            {
+                Assert.That(solution[i], Is.EqualTo(exactSolution[i]).Within(Math.Pow(10, -10)));
+            }
+        }
+
+        [Test]
+        public void SolveEquationWithHilbertMatrixTest()
+        {
+            var matrix = new Matrix(7);
+            var size = matrix.RowCount;
+            for (var i = 0; i < 7; i++)
+            {
+                for (var j = 0; j < 7; j++)
+                {
+                    matrix[i, j] = 1;
+                    matrix[i, j] /= 1 + i + j;
+                }
+            }
+            var vector = new Vector(new double[] { 1, 1, 1, 1, 1, 1, 1 });
+            vector[0] = vector[0] * 5699 / 420;
+            vector[1] = vector[1] * 4103 / 420;
+            vector[2] = vector[2] * 19661 / 2520;
+            vector[3] = vector[3] * 157 / 24;
+            vector[4] = vector[4] * 156631 / 27720;
+            vector[5] = vector[5] * 34523 / 6930;
+            vector[6] = vector[6] * 146077 / 32760;
+            var exactSolution = new Vector(new double[] { 2, 9, 4, 7, 11, 9, 2 });
+
+            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            var solution = luDecomposition.SolveEquationWithLUDecomposition();
+            for (var i = 0; i < size; i++)
+            {
+                Assert.That(solution[i], Is.EqualTo(exactSolution[i]).Within(Math.Pow(10, -7)));
             }
         }
     }
