@@ -104,7 +104,7 @@ namespace Task2
                 {
                     sum += uMatrix[size - i - 1, size - j - 1] * xSolution[size - j - 1];
                 }
-                xSolution[size - i - 1] = (vector[size - i - 1] - sum) / uMatrix[size - i - 1, size - i - 1];
+                xSolution[size - i - 1] = (ySolution[size - i - 1] - sum) / uMatrix[size - i - 1, size - i - 1];
             }
 
             return xSolution;

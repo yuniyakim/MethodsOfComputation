@@ -90,5 +90,25 @@ namespace Task2.Tests
                 }
             }
         }
+
+        [Test]
+        public void SolveEquationWithLUDecompositionTest()
+        {
+            var matrix = new Matrix(2);
+            var size = matrix.RowCount;
+            matrix[0, 0] = -400.6;
+            matrix[0, 1] = 199.8;
+            matrix[1, 0] = 1198.8;
+            matrix[1, 1] = -600.4;
+            var vector = new Vector(new double[] { 200, -600 });
+            var exactSolution = new Vector(new double[] { -0.2, 0.6 });
+
+            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            var solution = luDecomposition.SolveEquationWithLUDecomposition();
+            for (var i = 0; i < size; i++)
+            {
+                Assert.That(solution[i], Is.EqualTo(exactSolution[i]).Within(Math.Pow(10, -10)));
+            }
+        }
     }
 }
