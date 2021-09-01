@@ -107,7 +107,7 @@ namespace Task2.Tests
             var vector = Vector<double>.Build.DenseOfArray(new double[] { 200, -600 });
             var exactSolution = Vector<double>.Build.DenseOfArray(new double[] { -0.2, 0.6 });
 
-            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            luDecomposition = new LUDecomposition(matrix, vector);
             var solution = luDecomposition.SolveEquationWithLUDecomposition();
             for (var i = 0; i < size; i++)
             {
@@ -127,7 +127,7 @@ namespace Task2.Tests
             var vector = Vector<double>.Build.DenseOfArray(new double[] { -0.393, -0.389 });
             var exactSolution = Vector<double>.Build.DenseOfArray(new double[] { 0.3, -0.7 });
 
-            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            luDecomposition = new LUDecomposition(matrix, vector);
             var solution = luDecomposition.SolveEquationWithLUDecomposition();
             for (var i = 0; i < size; i++)
             {
@@ -152,7 +152,7 @@ namespace Task2.Tests
             var vector = Vector<double>.Build.DenseOfArray(new double[] { -200.3, 120.08, 80.08 });
             var exactSolution = Vector<double>.Build.DenseOfArray(new double[] { 0.5, -0.2, 0.4 });
 
-            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            luDecomposition = new LUDecomposition(matrix, vector);
             var solution = luDecomposition.SolveEquationWithLUDecomposition();
             for (var i = 0; i < size; i++)
             {
@@ -183,7 +183,7 @@ namespace Task2.Tests
             vector[6] = vector[6] * 146077 / 32760;
             var exactSolution = Vector<double>.Build.DenseOfArray(new double[] { 2, 9, 4, 7, 11, 9, 2 });
 
-            luDecomposition = new LUDecomposition(matrix, vector, exactSolution);
+            luDecomposition = new LUDecomposition(matrix, vector);
             var solution = luDecomposition.SolveEquationWithLUDecomposition();
             for (var i = 0; i < size; i++)
             {
