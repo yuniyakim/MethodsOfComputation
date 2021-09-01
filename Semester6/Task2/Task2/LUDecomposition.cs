@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DotNumerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace Task2
 {
@@ -10,17 +10,22 @@ namespace Task2
     /// </summary>
     public class LUDecomposition
     {
-        private Matrix matrix;
-        private Vector vector;
-        private Vector exactSolution;
+        private Matrix<double>  matrix;
+        private Vector<double> vector;
+        private Vector<double> exactSolution;
 
         public int size { get; private set; }
 
         /// <summary>
         /// LU decmposition's constructor
         /// </summary>
+        public LUDecomposition() { }
+
+        /// <summary>
+        /// LU decmposition's constructor
+        /// </summary>
         /// <param name="matrix">Given matrix</param>
-        public LUDecomposition(Matrix matrix)
+        public LUDecomposition(Matrix<double> matrix)
         {
             this.matrix = matrix;
             size = matrix.RowCount;
@@ -32,7 +37,7 @@ namespace Task2
         /// <param name="matrix">Given matrix</param>
         /// <param name="vector">Given vector</param>
         /// <param name="exactSolution">Given exact solution</param>
-        public LUDecomposition(Matrix matrix, Vector vector, Vector exactSolution)
+        public LUDecomposition(Matrix<double> matrix, Vector<double> vector, Vector<double> exactSolution)
         {
             this.matrix = matrix;
             this.vector = vector;
@@ -44,10 +49,10 @@ namespace Task2
         /// Calculates L and U matrices
         /// </summary>
         /// <returns>L and U matrices</returns>
-        public (Matrix, Matrix) CalculateLUMatrices()
+        public (Matrix<double>, Matrix<double>) CalculateLUMatrices()
         {
-            var lMatrix = new Matrix(size);
-            var uMatrix = new Matrix(size);
+            var lMatrix = Matrix<double>.Build.Dense(size, size);
+            var uMatrix = Matrix<double>.Build.Dense(size, size);
             for (var i = 0; i < size; i++)
             {
                 for (var j = 0; j < size; j++)
@@ -81,13 +86,13 @@ namespace Task2
         /// Solves linear equation with LU decomposition
         /// </summary>
         /// <returns>solution of equation</returns>
-        public Vector SolveEquationWithLUDecomposition()
+        public Vector<double> SolveEquationWithLUDecomposition()
         {
             var luMatrices = CalculateLUMatrices();
             var lMatrix = luMatrices.Item1;
             var uMatrix = luMatrices.Item2;
 
-            var ySolution = new Vector(size);
+            var ySolution = Vector<double>.Build.Dense(size);
             for (var i = 0; i < size; i++)
             {
                 double sum = 0;
@@ -98,7 +103,7 @@ namespace Task2
                 ySolution[i] = vector[i] - sum;
             }
 
-            var xSolution = new Vector(size);
+            var xSolution = Vector<double>.Build.Dense(size);
             for (var i = 0; i < size; i++)
             {
                 double sum = 0;
@@ -117,7 +122,7 @@ namespace Task2
         /// </summary>
         public void Start()
         {
-            //var equations = new List<(Matrix, Vector, Vector)>();
+            var equations = new List<(Matrix<double>, Vector<double>, Vector<double>)>();
             //var matrix1 = new Matrix(2, 2);
             //matrix1[0, 0] = -400.6;
             //matrix1[0, 1] = 199.8;
@@ -136,15 +141,19 @@ namespace Task2
             //var exactSolution2 = new Vector(new double[] { 200, -200 });
             //equations.Add((matrix2, vector2, exactSolution2));
 
-            //var matrix3 = new Matrix(7, 7);
-            //for (var i = 0; i < 7; i++)
-            //{
-            //    for (var j = 0; j < 7; j++)
-            //    {
-            //        matrix3[i, j] = 1;
-            //        matrix3[i, j] /= 1 + i + j;
-            //    }
-            //}
+            var matrix4 = Matrix<double>.Build.Dense(4, 4);
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 0; j < 4; j++)
+                {
+                    matrix4[i, j] = 1;
+                    matrix4[i, j] /= 1 + i + j;
+                }
+            }
+            var vector4 = Vector<double>.Build.DenseOfArray(new double[] { -787, 1589 });
+            var exactSolution4 = Vector<double>.Build.DenseOfArray(new double[] { 13, -2 });
+            equations.Add((matrix4, vector4, exactSolution4));
+
             //var vector3 = new Vector(new double[] { 1, 1, 1, 1, 1, 1, 1 });
             //vector3[0] = vector3[0] * 5699 / 420;
             //vector3[1] = vector3[1] * 4103 / 420;
@@ -161,9 +170,6 @@ namespace Task2
             //matrix4[0, 1] = 127;
             //matrix4[1, 0] = 113;
             //matrix4[1, 1] = -60;
-            //var vector4 = new Vector(new double[] { -787, 1589 });
-            //var exactSolution4 = new Vector(new double[] { 13, -2 });
-            //equations.Add((matrix4, vector4, exactSolution4));
 
             //foreach (var equation in equations)
             //{
