@@ -130,7 +130,7 @@ namespace Task3.Tests
             var solution = qrDecomposition.SolveEquationWithQRDecomposition();
             for (var i = 0; i < size; i++)
             {
-                Assert.That(solution[i], Is.EqualTo(exactSolution[i]).Within(Math.Pow(10, -7)));
+                Assert.That(solution[i], Is.EqualTo(exactSolution[i]).Within(Math.Pow(10, -6)));
             }
         }
     }

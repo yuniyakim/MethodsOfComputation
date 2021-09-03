@@ -79,33 +79,22 @@ namespace Task3
         /// <returns>Solution of equation</returns>
         public Vector<double> SolveEquationWithQRDecomposition()
         {
-            //var luMatrices = CalculateQRMatrices();
-            //var lMatrix = luMatrices.Item1;
-            //var uMatrix = luMatrices.Item2;
+            var qrMatrices = CalculateQRMatrices();
+            var qMatrix = qrMatrices.Item1;
+            var rMatrix = qrMatrices.Item2;
 
-            //var ySolution = Vector<double>.Build.Dense(size);
-            //for (var i = 0; i < size; i++)
-            //{
-            //    double sum = 0;
-            //    for (var j = 0; j < i; j++)
-            //    {
-            //        sum += lMatrix[i, j] * ySolution[j];
-            //    }
-            //    ySolution[i] = vector[i] - sum;
-            //}
-
-            var xSolution = Vector<double>.Build.Dense(size);
-            //for (var i = 0; i < size; i++)
-            //{
-            //    double sum = 0;
-            //    for (var j = 0; j < i; j++)
-            //    {
-            //        sum += uMatrix[size - i - 1, size - j - 1] * xSolution[size - j - 1];
-            //    }
-            //    xSolution[size - i - 1] = (ySolution[size - i - 1] - sum) / uMatrix[size - i - 1, size - i - 1];
-            //}
-
-            return xSolution;
+            var solution = Vector<double>.Build.Dense(size);
+            var qTb = qMatrix.TransposeThisAndMultiply(vector);
+            for (var i = 0; i < size; i++)
+            {
+                double sum = 0;
+                for (var j = 0; j < i; j++)
+                {
+                    sum += rMatrix[size - i - 1, size - j - 1] * solution[size - j - 1];
+                }
+                solution[size - i - 1] = (qTb[size - i - 1] - sum) / rMatrix[size - i - 1, size - i - 1];
+            }
+            return solution;
         }
 
         /// <summary>
@@ -132,6 +121,8 @@ namespace Task3
             Console.WriteLine(CalculateQRMatrices().Item1);
             Console.WriteLine();
             Console.WriteLine(CalculateQRMatrices().Item2);
+
+            Console.WriteLine();
             //    var equations = new List<(Matrix<double>, Vector<double>)>();
 
             //    var matrix4 = Matrix<double>.Build.Dense(4, 4);
