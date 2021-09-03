@@ -102,103 +102,81 @@ namespace Task3
         /// </summary>
         public void Start()
         {
-            var A = Matrix<double>.Build.DenseOfArray(new double[,]
+            var equations = new List<(Matrix<double>, Vector<double>)>();
+
+            var matrix4 = Matrix<double>.Build.Dense(4, 4);
+            for (var i = 0; i < 4; i++)
             {
-                    {  12,  -51,    4 },
-                    {   6,  167,  -68 },
-                    {  -4,   24,  -41 }
-            });
-            Console.WriteLine("A:");
-            Console.WriteLine(A);
-            var qr = A.QR();
-            Console.WriteLine();
-            Console.WriteLine("Q:");
-            Console.WriteLine(qr.Q);
-            Console.WriteLine();
+                for (var j = 0; j < 4; j++)
+                {
+                    matrix4[i, j] = 1;
+                    matrix4[i, j] /= 1 + i + j;
+                }
+            }
+            var vector4 = Vector<double>.Build.Dense(4, 1.0);
+            equations.Add((matrix4, vector4));
 
-            matrix = A;
-            size = A.RowCount;
-            Console.WriteLine(CalculateQRMatrices().Item1);
-            Console.WriteLine();
-            Console.WriteLine(CalculateQRMatrices().Item2);
+            var matrix5 = Matrix<double>.Build.Dense(5, 5);
+            for (var i = 0; i < 5; i++)
+            {
+                for (var j = 0; j < 5; j++)
+                {
+                    matrix5[i, j] = 1;
+                    matrix5[i, j] /= 1 + i + j;
+                }
+            }
+            var vector5 = Vector<double>.Build.Dense(5, 1);
+            equations.Add((matrix5, vector5));
 
-            Console.WriteLine();
-            //    var equations = new List<(Matrix<double>, Vector<double>)>();
+            var matrix6 = Matrix<double>.Build.Dense(6, 6);
+            for (var i = 0; i < 6; i++)
+            {
+                for (var j = 0; j < 6; j++)
+                {
+                    matrix6[i, j] = 1;
+                    matrix6[i, j] /= 1 + i + j;
+                }
+            }
+            var vector6 = Vector<double>.Build.Dense(6, 1);
+            equations.Add((matrix6, vector6));
 
-            //    var matrix4 = Matrix<double>.Build.Dense(4, 4);
-            //    for (var i = 0; i < 4; i++)
-            //    {
-            //        for (var j = 0; j < 4; j++)
-            //        {
-            //            matrix4[i, j] = 1;
-            //            matrix4[i, j] /= 1 + i + j;
-            //        }
-            //    }
-            //    var vector4 = Vector<double>.Build.Dense(4, 1.0);
-            //    equations.Add((matrix4, vector4));
+            var matrix7 = Matrix<double>.Build.Dense(7, 7);
+            for (var i = 0; i < 7; i++)
+            {
+                for (var j = 0; j < 7; j++)
+                {
+                    matrix7[i, j] = 1;
+                    matrix7[i, j] /= 1 + i + j;
+                }
+            }
+            var vector7 = Vector<double>.Build.Dense(7, 1);
+            equations.Add((matrix7, vector7));
 
-            //    var matrix5 = Matrix<double>.Build.Dense(5, 5);
-            //    for (var i = 0; i < 5; i++)
-            //    {
-            //        for (var j = 0; j < 5; j++)
-            //        {
-            //            matrix5[i, j] = 1;
-            //            matrix5[i, j] /= 1 + i + j;
-            //        }
-            //    }
-            //    var vector5 = Vector<double>.Build.Dense(5, 1);
-            //    equations.Add((matrix5, vector5));
+            foreach (var equation in equations)
+            {
+                Console.WriteLine($"Hilbert matrix of order {equation.Item1.RowCount}.");
 
-            //    var matrix6 = Matrix<double>.Build.Dense(6, 6);
-            //    for (var i = 0; i < 6; i++)
-            //    {
-            //        for (var j = 0; j < 6; j++)
-            //        {
-            //            matrix6[i, j] = 1;
-            //            matrix6[i, j] /= 1 + i + j;
-            //        }
-            //    }
-            //    var vector6 = Vector<double>.Build.Dense(6, 1);
-            //    equations.Add((matrix6, vector6));
+                Console.WriteLine(string.Format("|{0,-10}|{1,-25}|{2,-25}|{3,25}|", "α", "cond (A + αE)", "||x - x_α||", "||b - Ax_α||"));
 
-            //    var matrix7 = Matrix<double>.Build.Dense(7, 7);
-            //    for (var i = 0; i < 7; i++)
-            //    {
-            //        for (var j = 0; j < 7; j++)
-            //        {
-            //            matrix7[i, j] = 1;
-            //            matrix7[i, j] /= 1 + i + j;
-            //        }
-            //    }
-            //    var vector7 = Vector<double>.Build.Dense(7, 1);
-            //    equations.Add((matrix7, vector7));
+                matrix = equation.Item1;
+                vector = equation.Item2;
+                var solution = matrix.Solve(vector);
 
-            //    foreach (var equation in equations)
-            //    {
-            //        Console.WriteLine($"Hilbert matrix of order {equation.Item1.RowCount}.");
-
-            //        Console.WriteLine(string.Format("|{0,-10}|{1,-25}|{2,-25}|{3,25}|", "α", "cond (A + αE)", "||x - x_α||", "||b - Ax_α||"));
-
-            //        matrix = equation.Item1;
-            //        vector = equation.Item2;
-            //        var solution = matrix.Solve(vector);
-            //        Console.WriteLine(string.Format("|{0,-10}|{1,-25}|{2,-25}|{3,25}|", 0, matrix.ConditionNumber(), 0, 0));
-
-            //        for (var i = -1; i > -13; i--)
-            //        {
-            //            var alpha = Math.Pow(10, i);
-            //            matrix = equation.Item1.Add(alpha);
-            //            var cond = matrix.ConditionNumber();
-            //            size = matrix.RowCount;
-            //            var newSolution = SolveEquationWithQRDecomposition();
-            //            var error = solution.Subtract(newSolution).L2Norm();
-            //            var norm = vector.Subtract(equation.Item1.Multiply(newSolution)).L2Norm();
-            //            Console.WriteLine(string.Format("|{0,-10}|{1,-25}|{2,-25}|{3,25}|", alpha, cond, error, norm));
-            //        }
-            //        matrix = null;
-            //        vector = null;
-            //        Console.WriteLine();
-            //    }
+                for (var i = 0; i > -13; i--)
+                {
+                    var alpha = i == 0 ? 0 : Math.Pow(10, i);
+                    matrix = equation.Item1.Add(alpha);
+                    var cond = matrix.ConditionNumber();
+                    size = matrix.RowCount;
+                    var newSolution = SolveEquationWithQRDecomposition();
+                    var error = solution.Subtract(newSolution).L2Norm();
+                    var norm = vector.Subtract(equation.Item1.Multiply(newSolution)).L2Norm();
+                    Console.WriteLine(string.Format("|{0,-10}|{1,-25}|{2,-25}|{3,25}|", alpha, cond, error, norm));
+                }
+                matrix = null;
+                vector = null;
+                Console.WriteLine();
+            }
         }
     }
 }
