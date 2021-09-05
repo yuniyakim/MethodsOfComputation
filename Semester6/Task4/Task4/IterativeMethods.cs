@@ -194,6 +194,14 @@ namespace Task4
             var vector3 = Vector<double>.Build.Random(2, 666);
             equations.Add((matrix3, vector3));
 
+            var matrix31 = Matrix<double>.Build.Dense(2, 2);
+            matrix31[0, 0] = -401.98;
+            matrix31[0, 1] = 200.34;
+            matrix31[1, 0] = 1202.04;
+            matrix31[1, 1] = -602.32;
+            var vector31 = Vector<double>.Build.Random(2, 666);
+            equations.Add((matrix31, vector31));
+
             var matrix4 = Matrix<double>.Build.Dense(4, 4);
             for (var i = 0; i < 4; i++)
             {
@@ -240,7 +248,7 @@ namespace Task4
                 size = matrix.RowCount;
                 var solution = matrix.Solve(vector);
 
-                for (var i = -2; i > -13; i -= 2)
+                for (var i = -3; i > -13; i -= 2)
                 {
                     var epsilon = Math.Pow(10, i);
                     var result = SolveWithSimpleIterationMethod(vector, epsilon);
@@ -254,7 +262,7 @@ namespace Task4
                 Console.WriteLine("Seidel method");
                 Console.WriteLine(string.Format("{0,-10}|{1,-25}|{2,-25}", "ε", "||x - x_ε||", "Amount of iterations"));
 
-                for (var i = -2; i > -13; i -= 2)
+                for (var i = -3; i > -13; i -= 2)
                 {
                     var epsilon = Math.Pow(10, i);
                     size = matrix.RowCount;
