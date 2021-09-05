@@ -78,13 +78,60 @@ namespace Task4
         }
 
         /// <summary>
+        /// Solves equation with Seidel method
+        /// </summary>
+        /// <param name="xInitial">Initial x</param>
+        /// <param name="epsilon">Epsilon</param>
+        /// <returns>Solution and amount of iterations</returns>
+        public (Vector<double>, int) SolveWithSeidelMethod(Vector<double> xInitial, double epsilon)
+        {
+            var rMatrix = Matrix<double>.Build.Dense(size, size);
+            var lMatrix = Matrix<double>.Build.Dense(size, size);
+            var dMatrix = Matrix<double>.Build.Dense(size, size);
+            for (var i = 0; i < size; i++)
+            {
+                for (var j = 0; j < size; j++)
+                {
+                    if (i > j)
+                    {
+                        lMatrix[i, j] = matrix[i, j];
+                    }
+                    else if (i < j)
+                    {
+                        rMatrix[i, j] = matrix[i, j];
+                    }
+                    else
+                    {
+                        dMatrix[i, j] = matrix[i, j];
+                    }
+                }
+            }
+            var beta = dMatrix.Add(lMatrix).Inverse();
+            var a = beta.Multiply(-1).Multiply(rMatrix);
+            var b = beta.Multiply(xInitial);
+
+            var amount = 1;
+            var xCurrent = a.Multiply(xInitial) + b;
+            var xPrevious = Vector<double>.Build.Dense(size);
+            xInitial.CopyTo(xPrevious);
+            while (amount < 500 && (xCurrent - xPrevious).L2Norm() > epsilon)
+            {
+                xPrevious = xCurrent;
+                xCurrent = a.Multiply(xPrevious) + b;
+                amount++;
+            }
+
+            return (xCurrent, amount);
+        }
+
+        /// <summary>
         /// Starts running program
         /// </summary>
         public void Start()
         {
             var equations = new List<(Matrix<double>, Vector<double>)>();
 
-            var matrix0 =  Matrix<double>.Build.Dense(3, 3);
+            var matrix0 = Matrix<double>.Build.Dense(3, 3);
             matrix0[0, 0] = -400.6;
             matrix0[0, 1] = 0;
             matrix0[0, 2] = 0;
@@ -97,20 +144,46 @@ namespace Task4
             var vector0 = Vector<double>.Build.Random(3, 42);
             equations.Add((matrix0, vector0));
 
-            var matrix1 = Matrix<double>.Build.Dense(2, 2);
+            var matrix1 = Matrix<double>.Build.Dense(3, 3);
             matrix1[0, 0] = -198.1;
-            matrix1[0, 1] = 202.4;
+            matrix1[0, 1] = 389.9;
+            matrix1[0, 2] = 123.2;
             matrix1[1, 0] = 0;
-            matrix1[1, 1] = -489.2;
-            var vector1 = Vector<double>.Build.Random(2, 16);
+            matrix1[1, 1] = 202.4;
+            matrix1[1, 2] = 249.3;
+            matrix1[2, 0] = 0;
+            matrix1[2, 1] = 0;
+            matrix1[2, 2] = -489.2;
+            var vector1 = Vector<double>.Build.Random(3, 16);
             equations.Add((matrix1, vector1));
 
-            var matrix2 =  Matrix<double>.Build.Dense(2, 2);
-            matrix2[0, 0] = -400.6;
-            matrix2[0, 1] = 199.8;
-            matrix2[1, 0] = 1198.8;
-            matrix2[1, 1] = -600.4;
-            var vector2 = Vector<double>.Build.Random(2, 42);
+            var matrix2 = Matrix<double>.Build.Dense(5, 5);
+            matrix2[0, 0] = 2;
+            matrix2[0, 1] = -1;
+            matrix2[0, 2] = 0;
+            matrix2[0, 3] = 0;
+            matrix2[0, 4] = 0;
+            matrix2[1, 0] = -3;
+            matrix2[1, 1] = 8;
+            matrix2[1, 2] = -1;
+            matrix2[1, 3] = 0;
+            matrix2[1, 4] = 0;
+            matrix2[2, 0] = 0;
+            matrix2[2, 1] = -5;
+            matrix2[2, 2] = 12;
+            matrix2[2, 3] = 2;
+            matrix2[2, 4] = 0;
+            matrix2[3, 0] = 0;
+            matrix2[3, 1] = 0;
+            matrix2[3, 2] = -6;
+            matrix2[3, 3] = 18;
+            matrix2[3, 4] = -4;
+            matrix2[4, 0] = 0;
+            matrix2[4, 1] = 0;
+            matrix2[4, 2] = 0;
+            matrix2[4, 3] = -5;
+            matrix2[4, 4] = 10;
+            var vector2 = Vector<double>.Build.Random(5, 10);
             equations.Add((matrix2, vector2));
 
             var matrix3 =  Matrix<double>.Build.Dense(2, 2);
@@ -159,11 +232,7 @@ namespace Task4
 
             foreach (var equation in equations)
             {
-                if (equation.Item1.RowCount > 3)
-                {
-                    Console.WriteLine($"Hilbert matrix of order {equation.Item1.RowCount}.");
-                }
-
+                Console.WriteLine("Simple-iteration method");
                 Console.WriteLine(string.Format("{0,-10}|{1,-25}|{2,-25}", "ε", "||x - x_ε||", "Amount of iterations"));
 
                 matrix = equation.Item1;
@@ -174,16 +243,31 @@ namespace Task4
                 for (var i = -2; i > -13; i -= 2)
                 {
                     var epsilon = Math.Pow(10, i);
-                    size = matrix.RowCount;
                     var result = SolveWithSimpleIterationMethod(vector, epsilon);
                     var newSolution = result.Item1;
                     var amount = result.Item2;
                     var error = solution.Subtract(newSolution).L2Norm();
                     Console.WriteLine(string.Format("{0,-10}|{1,-25}|{2,-25}", epsilon, error, amount));
-
                 }
+
+                Console.WriteLine();
+                Console.WriteLine("Seidel method");
+                Console.WriteLine(string.Format("{0,-10}|{1,-25}|{2,-25}", "ε", "||x - x_ε||", "Amount of iterations"));
+
+                for (var i = -2; i > -13; i -= 2)
+                {
+                    var epsilon = Math.Pow(10, i);
+                    size = matrix.RowCount;
+                    var result = SolveWithSeidelMethod(vector, epsilon);
+                    var newSolution = result.Item1;
+                    var amount = result.Item2;
+                    var error = solution.Subtract(newSolution).L2Norm();
+                    Console.WriteLine(string.Format("{0,-10}|{1,-25}|{2,-25}", epsilon, error, amount));
+                }
+
                 matrix = null;
                 vector = null;
+                Console.WriteLine();
                 Console.WriteLine();
             }
         }
