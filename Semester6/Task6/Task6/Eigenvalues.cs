@@ -42,6 +42,31 @@ namespace Task6
         }
 
         /// <summary>
+        /// Finds max module element in matrix
+        /// </summary>
+        /// <param name="currentMatrix">Matrix to analyze</param>
+        /// <returns>Row and column numbers</returns>
+        public (int, int) FindMaxModuleElementInMatrix(Matrix<double> currentMatrix)
+        {
+            var iMax = 0;
+            var jMax = 1;
+            var maxModuleElement = currentMatrix[iMax, jMax];
+            for (var i = 0; i < currentMatrix.RowCount; i++)
+            {
+                for (var j = i + 1; j < currentMatrix.RowCount; j++)
+                {
+                    if (Math.Abs(maxModuleElement) < Math.Abs(currentMatrix[i, j]))
+                    {
+                        maxModuleElement = currentMatrix[i, j];
+                        iMax = i;
+                        jMax = j;
+                    }
+                }
+            }
+            return (iMax, jMax);
+        }
+
+        /// <summary>
         /// Calculates max eigenvalue with power method
         /// </summary>
         /// <param name="xInitial">Initial x</param>
