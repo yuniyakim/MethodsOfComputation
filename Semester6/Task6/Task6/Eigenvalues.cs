@@ -67,65 +67,54 @@ namespace Task6
         }
 
         /// <summary>
-        /// Calculates max eigenvalue with power method
+        /// Calculates eigenvalues with Jacobi method
         /// </summary>
-        /// <param name="xInitial">Initial x</param>
         /// <param name="epsilon">Epsilon</param>
-        /// <returns>Max eigenvalue and amount of iterations</returns>
-        public (double, int) CalculateMaxEigenvalueWithPowerMethod(Vector<double> xInitial, double epsilon)
+        /// <param name="isStrategyMaxModule">Indicator if chosen strategy is max module element</param>
+        /// <returns></returns>
+        public (Vector<double>, int) CalculateEigenvaluesWithJacobiMethod(double epsilon, bool isStrategyMaxModule)
         {
-            var xCurrent = matrix.Multiply(xInitial);
-            var xPrevious = Vector<double>.Build.Dense(size);
-            xInitial.CopyTo(xPrevious);
-            var amount = 1;
-            var valuePrevious = xCurrent[0] / xPrevious[0];
-            xPrevious = xCurrent;
-            xCurrent = matrix.Multiply(xCurrent);
-            var valueCurrent = xCurrent[0] / xPrevious[0];
-            while (amount < 500 && Math.Abs(valueCurrent - valuePrevious) > epsilon)
+            var amount = 0;
+            var i = 0;
+            var j = 0;
+            var currentMatrix = matrix.Clone();
+            while (true)
             {
-                valuePrevious = valueCurrent;
-                xPrevious = xCurrent;
-                xCurrent = matrix.Multiply(xCurrent);
-                valueCurrent = xCurrent[0] / xPrevious[0];
+                var hMatrix = Matrix<double>.Build.DenseIdentity(currentMatrix.RowCount);
+                if (isStrategyMaxModule)
+                {
+                    var element = FindMaxModuleElementInMatrix(currentMatrix);
+                    i = element.Item1;
+                    j = element.Item2;
+                }
+                else
+                {
+                    if (j < currentMatrix.RowCount - 1 && j + 1 != i)
+                    {
+                        j++;
+                    }
+                    else if (j == currentMatrix.RowCount - 1)
+                    {
+                        i++;
+                        j = 0;
+                    }
+                    else
+                    {
+                        j += 2;
+                    }
+                }
+                if ((i == currentMatrix.RowCount - 1 && j == currentMatrix.RowCount) || Math.Abs(currentMatrix[i, j]) < epsilon)
+                {
+                    return (currentMatrix.Diagonal(), amount);
+                }
                 amount++;
+                var phi = 1 / 2 * Math.Atan(2 * currentMatrix[i, j] / (currentMatrix[i, i] - currentMatrix[j, j]));
+                hMatrix[i, i] = Math.Cos(phi);
+                hMatrix[j, j] = Math.Cos(phi);
+                hMatrix[i, j] = -Math.Sin(phi);
+                hMatrix[j, i] = Math.Sin(phi);
+                currentMatrix = hMatrix.TransposeThisAndMultiply(currentMatrix).Multiply(hMatrix);
             }
-
-            return (Math.Abs(valueCurrent), amount);
-        }
-
-
-        /// <summary>
-        /// Calculates max eigenvalue with scalar products method
-        /// </summary>
-        /// <param name="xInitial">Initial x</param>
-        /// <param name="epsilon">Epsilon</param>
-        /// <returns>Max eigenvalue and amount of iterations</returns>
-        public (double, int) CalculateMaxEigenvalueWithScalarProductsMethod(Vector<double> xInitial, double epsilon)
-        {
-            var xCurrent = matrix.Multiply(xInitial);
-            var xPrevious = Vector<double>.Build.Dense(size);
-            xInitial.CopyTo(xPrevious);
-            var matrixTransposed = matrix.Transpose();
-            var yCurrent = matrixTransposed.Multiply(xPrevious);
-            var valuePrevious = xCurrent.ToRowMatrix().Multiply(yCurrent)[0] / xPrevious.ToRowMatrix().Multiply(xInitial)[0];
-            var amount = 1;
-
-            xPrevious = xCurrent;
-            xCurrent = matrix.Multiply(xCurrent);
-            yCurrent = matrixTransposed.Multiply(yCurrent);
-            var valueCurrent = xCurrent.ToRowMatrix().Multiply(yCurrent)[0] / xPrevious.ToRowMatrix().Multiply(yCurrent)[0];
-            while (amount < 500 && Math.Abs(valueCurrent - valuePrevious) > epsilon)
-            {
-                valuePrevious = valueCurrent;
-                xPrevious = xCurrent;
-                xCurrent = matrix.Multiply(xCurrent);
-                yCurrent = matrixTransposed.Multiply(yCurrent);
-                valueCurrent = xCurrent.ToRowMatrix().Multiply(yCurrent)[0] / xPrevious.ToRowMatrix().Multiply(yCurrent)[0];
-                amount++;
-            }
-
-            return (Math.Abs(valueCurrent), amount);
         }
 
         /// <summary>
@@ -242,7 +231,7 @@ namespace Task6
                 for (var i = -2; i > -6; i--)
                 {
                     var epsilon = Math.Pow(10, i);
-                    var result = CalculateMaxEigenvalueWithPowerMethod(vector, epsilon);
+                    var result = CalculateEigenvaluesWithJacobiMethod(vector, epsilon);
                     var newEigenvalue = result.Item1;
                     var amount = result.Item2;
                     var error = Math.Abs(eigenvalue - newEigenvalue);
