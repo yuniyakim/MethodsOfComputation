@@ -191,6 +191,18 @@ namespace Task6
             var vector4 = Vector<double>.Build.Random(4, 4);
             equations.Add((matrix4, vector4));
 
+            var matrix41 = Matrix<double>.Build.Dense(7, 7);
+            for (var i = 0; i < 7; i++)
+            {
+                for (var j = 0; j < 7; j++)
+                {
+                    matrix41[i, j] = 1;
+                    matrix41[i, j] /= 1 + i + j;
+                }
+            }
+            var vector41 = Vector<double>.Build.Random(7, 4);
+            equations.Add((matrix41, vector41));
+
             var matrix6 = Matrix<double>.Build.Dense(15, 15);
             for (var i = 0; i < 15; i++)
             {
