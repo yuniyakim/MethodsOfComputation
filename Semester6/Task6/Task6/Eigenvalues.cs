@@ -191,18 +191,6 @@ namespace Task6
             var vector4 = Vector<double>.Build.Random(4, 4);
             equations.Add((matrix4, vector4));
 
-            //var matrix5 = Matrix<double>.Build.Dense(5, 5);
-            //for (var i = 0; i < 5; i++)
-            //{
-            //    for (var j = 0; j < 5; j++)
-            //    {
-            //        matrix5[i, j] = 1;
-            //        matrix5[i, j] /= 1 + i + j;
-            //    }
-            //}
-            //var vector5 = Vector<double>.Build.Random(5, 5);
-            //equations.Add((matrix5, vector5));
-
             var matrix6 = Matrix<double>.Build.Dense(15, 15);
             for (var i = 0; i < 15; i++)
             {
@@ -261,6 +249,18 @@ namespace Task6
                     var error = (newEigenvalue - eigenvalue).L2Norm();
                     Console.WriteLine(string.Format("{0,-10}|{1,-25}|{2,-25}", epsilon, error, amount));
                 }
+
+                Console.WriteLine();
+                var eigenvalues = CalculateEigenvaluesWithJacobiMethod(Math.Pow(10, -5), true).Item1;
+                var flag = true;
+                foreach (var value in eigenvalues)
+                {
+                    if (!IsInGershgorinCircle(matrix, value))
+                    {
+                        flag = false;
+                    }
+                }
+                Console.WriteLine($"Eigenvalue belongs to Gershgorin circle: {flag}.");
 
                 matrix = null;
                 vector = null;
