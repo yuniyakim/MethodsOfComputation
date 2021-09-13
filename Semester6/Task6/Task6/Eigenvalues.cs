@@ -229,7 +229,7 @@ namespace Task6
 
             foreach (var equation in equations)
             {
-                Console.WriteLine("Max module eigenvalue strategy");
+                Console.WriteLine("Max module value strategy");
                 Console.WriteLine(string.Format("{0,-10}|{1,-25}|{2,-25}", "ε", "|lambda - lambda_ε|", "Amount of iterations"));
 
                 matrix = equation.Item1;
