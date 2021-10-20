@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -23,9 +24,23 @@ namespace Task12.Chart
         {
             var random = new Random();
             var X = new List<(double, double)>();
-            for (var i = 0; i < 200; i++)
+            //for (var i = 0; i < 200; i++)
+            //{
+            //    X.Add((random.NextDouble() * 200, random.NextDouble() * 200));
+            //}
+            //using (var sw = new StreamWriter("list.txt"))
+            //{
+            //    foreach (var element in X)
+            //        sw.WriteLine(element.ToString());
+            //}
+            using (var sr = new StreamReader("list.txt"))
             {
-                X.Add((random.NextDouble() * 200, random.NextDouble() * 200));
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine();
+                    line = line.Substring(1, line.Length - 2);
+                    X.Add((Convert.ToDouble(line.Split(',')[0]), Convert.ToDouble(line.Split(' ')[1])));
+                }
             }
             var k = 4;
 
@@ -72,8 +87,8 @@ namespace Task12.Chart
             centersNames.Add("random");
             centersNames.Add("min & max");
 
-            var centerNumber = 1;
-            var metricsNumber = 1;
+            var centerNumber = 0;
+            var metricsNumber = 0;
             var kMeans = KMeansMethod.KMeans(X, centers[centerNumber], metrics[metricsNumber]);
 
             Model = new PlotModel { Title = "Chart" };
